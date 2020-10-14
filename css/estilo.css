@@ -1,0 +1,64 @@
+body {
+	background: #ececec;
+}
+.menu-superior {
+	box-shadow: 0px 0px 8px #000;
+}
+.row-menu-superior {
+	width: 100%;
+}
+.sidebar {
+	background: rgb(52 58 64);
+	width: 100%;
+	padding-right: 0;
+	padding-left: 0; 
+	position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 50px;
+    min-height: 100%;
+    width: 230px;
+}
+.content {
+    margin-left: 230px;
+    padding-top: 50px;
+    min-height: 100%;
+    width: 100%;
+    padding: 15px;
+}
+.conteudo {
+	margin-top: 30px;
+}
+.sidebar .accordion .card {
+	border: none;
+	border-radius: 0;
+}
+.sidebar .accordion .card-header {
+	width: 100%;
+	border-radius: 0;
+}
+.sidebar .accordion .card-header {
+	background-color: rgb(52 58 64);
+}
+.sidebar .accordion .card-body {
+	background-color: #475156;
+	padding:  0;
+}
+.sidebar .btn-link, .sidebar .nav-link {
+	color:  white;
+	display: block;
+}
+.sidebar .btn-link:hover {
+	color:  white;
+}
+.sidebar .nav-item:hover {
+	background-color: rgb(52 58 64);
+	color:  #fff;
+	width: 100%;
+}
+.sidebar .nav-link {
+	margin-left: 20px;
+}
+.icone-sidebar {
+	margin-right: 10px;
+}
