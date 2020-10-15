@@ -7,6 +7,18 @@ body {
 .row-menu-superior {
 	width: 100%;
 }
+.profile {
+	margin-left: 15px;
+}
+.profile img {
+	width: 45px;
+	height: 45px;
+	object-fit: cover;
+	border-radius: 50% 50%;
+}
+.profile .dropdown-toggle::after {
+	color: rgba(255,255,255,.5);
+}
 .sidebar {
 	background: rgb(52 58 64);
 	width: 100%;
@@ -61,4 +73,8 @@ body {
 }
 .icone-sidebar {
 	margin-right: 10px;
+}
+#bot {
+	float: right;
+	padding: 25px;
 }
