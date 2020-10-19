@@ -1,0 +1,20 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+
+function somar($num1, $num2) {
+	return $num1+$num2;
+}
+function subtrair($num1, $num2) {
+	return $num1-$num2;
+}
+
+function multiplicar($num1, $num2) {
+	return $num1*$num2;
+}
+
+function dividir($num1, $num2) {
+	return $num1/$num2;
+}
+
+?>

@@ -1,0 +1,25 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+
+$variavel = "Hola ";
+$nome     = 'Daniel Mascarenhas';
+$a        = 109;
+$b        = 100;
+$c        = $a.$b;
+
+$_2 = 698;
+
+echo $c;
+echo "<br>";
+echo $_2;
+echo "<br>";
+echo "<br>";
+
+if ($a == 89) {
+	echo 'a é igual a  '.$a;
+} else {
+	echo 'a não é 89';
+}
+
+?>

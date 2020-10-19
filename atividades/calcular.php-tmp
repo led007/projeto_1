@@ -1,0 +1,9 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+include ('funcoes.php');
+
+echo somar(58, 69);
+echo '<br>';
+echo subtrair(85455, 65465);
+?>
