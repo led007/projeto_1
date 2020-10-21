@@ -1,8 +1,10 @@
-<?php 
-include_once('layout/header.php');
-include_once('layout/menu.php');
-include_once('layout/sidebar.php');
-include_once('bd/produtos.php');
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+include_once ('layout/header.php');
+include_once ('layout/menu.php');
+include_once ('layout/sidebar.php');
+include_once ('bd/produtos.php');
 ?>
 <div class="col">
   <h2>Produtos</h2>
@@ -25,13 +27,13 @@ include_once('bd/produtos.php');
             <th>Preço</th>
             <th class="acao">Ação</th>
           </tr>
-          <?php for($i = 0; $i < count($produtos); $i++): ?>
+<?php for ($i = 0; $i < count($produtos); $i++):?>
           <tr>
-            <td><?= $i + 1 ?></td>
-            <td><?php echo $produtos[$i]['codigo']; ?></td>
-            <td><?php echo $produtos[$i]['nome']; ?></td>
-            <td><?php echo $produtos[$i]['categoria'] ?></td>
-            <td><?php echo number_format($produtos[$i]['preco'], 2,',','.'); ?></td>
+            <td><?=$i+1?></td>
+            <td><?php echo $produtos[$i]['codigo'];?></td>
+            <td><?php echo $produtos[$i]['nome'];?></td>
+            <td><?php echo $produtos[$i]['categoria']?></td>
+            <td><?php echo number_format($produtos[$i]['preco'], 2, ',', '.');?></td>
             <td>
               <a href="#" class="btn btn-success">
                 <i class="fas fa-eye"></i>
@@ -44,9 +46,8 @@ include_once('bd/produtos.php');
               </a>
             </td>
           </tr>
-        <?php endfor; ?>
-        
-      </table>
+<?php endfor;?>
+</table>
        <nav aria-label="Navegação de página exemplo" class="pagination">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
@@ -56,8 +57,8 @@ include_once('bd/produtos.php');
           <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
         </ul>
       </nav>
-      
+
     </div>
   </div>
 </div>
-<?php include_once('layout/footer.php'); ?>
+<?php include_once ('layout/footer.php');?>

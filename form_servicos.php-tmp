@@ -1,10 +1,11 @@
-<?php 
-include_once('layout/header.php');
-include_once('layout/menu.php');
-include_once('layout/sidebar.php');
- ?>
 
- <div class="col">
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+include_once ('layout/header.php');
+include_once ('layout/menu.php');
+include_once ('layout/sidebar.php');
+?>
+<div class="col">
 <h2>Novo Serviço</h2>
       <div class="card">
         <div class="card-body">
@@ -59,5 +60,5 @@ include_once('layout/sidebar.php');
         </div>
       </div>
     </div>
- <?php include_once('layout/footer.php');
+<?php include_once ('layout/footer.php');
 ?>

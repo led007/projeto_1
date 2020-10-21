@@ -17,13 +17,13 @@ Deprecated: The each() function is deprecated. This message will be suppressed o
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
               <ul class="nav flex-column menu-lateral">
-                <li class="nav-item"><a class="nav-link" href="clientes.html">Cliente</a></li>
-                <li class="nav-item"><a class="nav-link" href="fornecedores.html">Fornecedor</a></li>
-                <li class="nav-item"><a class="nav-link" href="colaboradores.html">Colaborador</a></li>
-                <li class="nav-item"><a class="nav-link" href="equipamentos.html">Equipamento</a></li>
-                <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
-                <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-                <li class="nav-item"><a class="nav-link" href="categorias.html">Categorias</a></li>
+                <li class="nav-item"><a class="nav-link" href="clientes.php">Cliente</a></li>
+                <li class="nav-item"><a class="nav-link" href="fornecedores.php">Fornecedor</a></li>
+                <li class="nav-item"><a class="nav-link" href="colaboradores.php">Colaborador</a></li>
+                <li class="nav-item"><a class="nav-link" href="equipamentos.php">Equipamento</a></li>
+                <li class="nav-item"><a class="nav-link" href="produtos.php">Produtos</a></li>
+                <li class="nav-item"><a class="nav-link" href="servicos.php">Serviços</a></li>
+                <li class="nav-item"><a class="nav-link" href="categorias.php">Categorias</a></li>
               </ul>
             </div>
           </div>
