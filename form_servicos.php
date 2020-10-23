@@ -2,6 +2,7 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+include_once('bd/categorias.php');
  ?>
 
  <div class="col">
@@ -41,7 +42,9 @@ include_once('layout/sidebar.php');
                  <label for="categoria">Categoria:</label>
                  <select name="categoria" id="categoria" class="form-control">
                    <option value="">Escolha</option>
-                   <option value="Exames">Exames</option>
+                   <?php foreach($categorias as $categoria): ?>
+                   <option value="<?php echo $categoria['nome'] ?>"><?php echo $categoria['nome'] ?></option>
+                  <?php endforeach; ?>
                  </select>
                </div>
              </div>

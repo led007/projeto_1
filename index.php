@@ -6,6 +6,9 @@
 
   <div class="col">
     Conteúdo gerado no dia <?php echo date('d/m/Y H:i') ?>
+
+
+
   </div>
         
 <?php include_once('layout/footer.php'); ?>

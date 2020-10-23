@@ -1,0 +1,12 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+$categorias = [
+	['nome' => 'Exame'],
+	['nome' => 'Eletronicos'],
+	['nome' => 'Moveis'],
+	['nome' => 'Coleta'],
+	['nome' => 'Insumos']
+];
+
+?>

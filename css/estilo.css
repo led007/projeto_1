@@ -118,3 +118,14 @@ body {
     background-color: #ffc107;
     color: black;
 }
+
+.totais {
+	position: relative;
+	margin:  10px;
+}
+.clear {
+	clear: both;
+}
+.titulo {
+	float: left;
+}

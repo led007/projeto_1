@@ -1,0 +1,11 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+$host    = 'localhost';
+$usuario = 'root';
+$senha   = 'root';
+$bd      = 'laborus';
+
+//Iniciando a conexão com o banco de dados MySQL/MariaDB
+$conexao = mysqli_connect($host, $usuario, $senha, $bd);
+?>

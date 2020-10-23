@@ -2,9 +2,12 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+include_once('bd/servicos.php');
  ?>
 <div class="col">
-<h2>Serviços</h2>
+<h2 class="titulo">Serviços</h2>
+<span class="badge badge-info totais">Total: <?php echo count($servicos); ?></span>
+<div class="clear"></div>
     <div class="card">
       <div class="card-body">
 
@@ -27,13 +30,13 @@ include_once('layout/sidebar.php');
         <th>Categoria</th>
         <th>Ações</th>
       </tr>
-      <?php for($i = 1; $i <= 10; $i++){ ?>
+      <?php foreach($servicos as $servico): ?>
       <tr>
-        <td>Código</td>
-        <td>Nome</td>
-        <td>Descrição</td>
-        <td>Preço</td>
-        <td>Categoria</td>
+        <td><?= $servico['codigo'] ?></td>
+        <td><?= $servico['nome'] ?></td>
+        <td><?= $servico['descricao'] ?></td>
+        <td><?= number_format($servico['preco'],2,',','.') ?></td>
+        <td><?= $servico['categoria'] ?></td>
         <td>
           <a href="#" class="btn btn-secondary">
             <i class="fas fa-eye"></i>
@@ -46,7 +49,7 @@ include_once('layout/sidebar.php');
           </a>
         </td>
       </tr>
-    <?php } ?>
+    <?php endforeach; ?>
     </table>
 
     <nav aria-label="Navegação de página exemplo">

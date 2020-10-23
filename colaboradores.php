@@ -2,9 +2,12 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+include_once('bd/colaboradores.php');
 ?>
 <div class="col">
-<h2>Colaboradores</h2>
+<h2 class="titulo">Colaboradores</h2>
+<span class="badge badge-info totais">Total: <?php echo count($colaboradores); ?></span>
+<div class="clear"></div>
   <div class="card">
     <div class="card-body">
       <a href="form_usuario.php" class="btn btn-primary" style="float: right">
@@ -23,11 +26,12 @@ include_once('layout/sidebar.php');
           <th>Telefone</th>
           <th class="acao">Ação</th>
         </tr>
+        <?php foreach($colaboradores as $chave => $colaborador): ?>
         <tr>
-          <td>nome</td>
-          <td>código</td>
-          <td>email</td>
-          <td>telefone</td>
+          <td><?= $colaborador['nome'] ?></td>
+          <td><?= $colaborador['codigo'] ?></td>
+          <td><?= $colaborador['email'] ?></td>
+          <td><?= $colaborador['telefone'] ?></td>
           <td>
             <a href="#" class="btn btn-success">
               <i class="fas fa-eye"></i>
@@ -40,57 +44,7 @@ include_once('layout/sidebar.php');
             </a>
           </td>
         </tr>
-        <tr>
-          <td>nome</td>
-          <td>código</td>
-          <td>email</td>
-          <td>telefone</td>
-          <td>
-            <a href="#" class="btn btn-success">
-              <i class="fas fa-eye"></i>
-            </a>
-            <a href="#" class="btn btn-warning">
-              <i class="fas fa-edit"></i>
-            </a>
-            <a href="#" class="btn btn-danger">
-              <i class="fas fa-trash"></i>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td>nome</td>
-          <td>código</td>
-          <td>email</td>
-          <td>telefone</td>
-          <td>
-            <a href="#" class="btn btn-success">
-              <i class="fas fa-eye"></i>
-            </a>
-            <a href="#" class="btn btn-warning">
-              <i class="fas fa-edit"></i>
-            </a>
-            <a href="#" class="btn btn-danger">
-              <i class="fas fa-trash"></i>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td>nome</td>
-          <td>código</td>
-          <td>email</td>
-          <td>telefone</td>
-          <td>
-            <a href="#" class="btn btn-success">
-              <i class="fas fa-eye"></i>
-            </a>
-            <a href="#" class="btn btn-warning">
-              <i class="fas fa-edit"></i>
-            </a>
-            <a href="#" class="btn btn-danger">
-              <i class="fas fa-trash"></i>
-            </a>
-          </td>
-        </tr>
+      <?php endforeach; ?>
       </table>
 
       <nav aria-label="Navegação de página exemplo" class="pagination">

@@ -1,10 +1,34 @@
 <?php 
+include_once('bd/conexao.php');
+
+//Monta a consulta a ser executada
+$sql = "SELECT * FROM categoria";
+
+//Execução da consulta ao banco de dados
+$qr = mysqli_query($conexao, $sql);
+
+//Armazenando o resultado em uma variável
+$categorias = mysqli_fetch_all($qr, MYSQLI_ASSOC);
+
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+/*include_once('bd/categorias.php');*/
+
+
+
 ?>
 <div class="col">
-  <h2>Categorias</h2>
+  <h2 class="titulo">Categorias</h2>
+  <span class="badge badge-info totais">Total: <?php echo count($categorias); ?></span>
+  <div class="clear"></div>
+
+  <?php if(isset($_GET['mensagem'])): ?>
+    <div class="alert alert-<?php echo $_GET['alert'] ?? 'success'; ?>" id="alert-mensagem">
+      <?php echo $_GET['mensagem']; ?>
+    </div>
+  <?php endif; ?>
+
   <div class="card">
     <div class="card-body">
       <a href="form_categorias.php" class="btn btn-primary" style="float: right">
@@ -20,8 +44,9 @@ include_once('layout/sidebar.php');
         <th>Categoria</th>
         <th class="acao">Ações</th>
       </tr>
+      <?php foreach($categorias as $chave => $categoria): ?>
     <tr>
-      <td>Categoria</td>
+      <td><?= $categoria['categoria'] ?></td>
     
       <td>
         <a href="#" class="btn btn-secondary">
@@ -30,92 +55,13 @@ include_once('layout/sidebar.php');
         <a href="#" class="btn btn-warning">
           <i class="fas fa-edit"></i>
         </a>
-        <a href="#" class="btn btn-danger">
+        <a href="gerencia_categorias.php?id=<?php echo $categoria['id']; ?>" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
           <i class="fas fa-trash"></i>
         </a>
       </td>
 
     </tr>
-    <tr>
-      <td>Categoria</td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
-    <tr>
-      <td>Categoria</td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
-    <tr>
-      <td>Categoria</td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
-    <tr>
-      <td>Categoria</td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
-    <tr>
-      <td>Categoria</td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="#" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
+  <?php endforeach; ?>
   </table>
 
   <nav aria-label="Navegação de página exemplo">

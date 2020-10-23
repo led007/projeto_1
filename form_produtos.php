@@ -2,6 +2,7 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+include_once('bd/categorias.php');
  ?>
 <div class="col">
   <h2>Novo Produto</h2>
@@ -17,13 +18,10 @@ include_once('layout/sidebar.php');
           <div class="col-md-6 col-sm-12 form-group">
             <label for="categoria">Categoría</label>
             <select class="form-control" name="categoria">
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
-              <option value="categoria">Categoria</option>
+              <option value="">Escolha</option>
+              <?php foreach($categorias as $categoria): ?>
+              <option value="<?= $categoria['nome'] ?>"><?= $categoria['nome'] ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
         </div>

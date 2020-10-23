@@ -4,6 +4,7 @@ Deprecated: The each() function is deprecated. This message will be suppressed o
 include_once ('layout/header.php');
 include_once ('layout/menu.php');
 include_once ('layout/sidebar.php');
+include_once ('bd/categorias.php');
 ?>
 <div class="col">
 <h2>Novo Serviço</h2>
@@ -42,8 +43,10 @@ include_once ('layout/sidebar.php');
                  <label for="categoria">Categoria:</label>
                  <select name="categoria" id="categoria" class="form-control">
                    <option value="">Escolha</option>
-                   <option value="Exames">Exames</option>
-                 </select>
+<?php foreach ($categorias as $categoria):?>
+                   <option value="<?php echo $categoria['nome']?>"><?php echo $categoria['nome']?></option>
+<?php endforeach;?>
+</select>
                </div>
              </div>
            </div>
