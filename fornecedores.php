@@ -47,7 +47,7 @@
             
             ?>
             <tr>
-              <td><?php echo $fornecedores[$i]['id'] ?></td>
+              <td><?php echo $fornecedores[$i]['razao_social'] ?></td>
               <td><?php echo $fornecedores[$i]['cnpj'] ?></td>
               <td><?php echo $fornecedores[$i]['telefone'] ?></td>
               <td>
@@ -55,7 +55,10 @@
                   <?php echo $fornecedores[$i]['email'] ?>
                 </a>
               </td>
-              <td><?php echo $fornecedores[$i]['cidade'] ?></td>
+              <td><?php echo $fornecedores[$i]['cidade'] 
+             
+              ?></td>
+
               <td>
                 <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerCliente">
                   <i class="fas fa-eye"></i>
@@ -63,7 +66,7 @@
                 <a href="#" class="btn btn-success">
                   <i class="fas fa-edit"></i>
                 </a>
-                <a href="gerencia_fornecedores.php?=<?php echo $fornecedores['id']; ?>" class="btn btn-danger">
+                <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>" class="btn btn-danger">
                   <i class="fas fa-trash" onclick="return confirm('Deseja realmente excluir?')"></i>
                 </a>
               </td>
