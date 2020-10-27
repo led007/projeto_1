@@ -7,7 +7,7 @@ include_once('layout/sidebar.php');
   <h2>Nova categoria</h2>
   <div class="card">
     <div class="card-body">
-     <form>
+     <form method="post" action="gerencia_categorias.php?acao=salvar">
        <div class="row">
          <div class="col-md-6 col-sm-12">
            <div class="form-group">

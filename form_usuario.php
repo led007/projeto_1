@@ -5,28 +5,29 @@ include_once('layout/sidebar.php');
  ?>
 <div class="col">
    <h2>Novo Usuário</h2>
+   <?php include_once('layout/mensagens.php'); ?>
   <div class="card">
     <div class="card-body">
-     <form>
+     <form action="gerencia_colaboradores.php?acao=salvar" method="post">
      <h5 id="">Dados de Login</h5>
      <br />
       <div class="row">
         <div class="col-md-4 col-sm-12">
           <div class="form-group">
-            <label for="usuario">Login</label>
-            <input type="text" name="usuario" placeholder="Informe um novo nome de usuário" class="form-control">
-          </div>
+             <label for="email">E-mail:</label>
+             <input type="email" name="email" id="email" class="form-control" required>
+           </div>
         </div>
         <div class="col-md-4 col-sm-12">
           <div class="form-group">
             <label for="senha">Senha</label>
-            <input type="password" name="senha" placeholder="Informe uma senha" class="form-control">
+            <input type="password" name="senha" placeholder="Informe uma senha" class="form-control" required>
           </div>
         </div>
         <div class="col-md-4 col-sm-12">
           <div class="form-group">
             <label for="senha">Confirmação de Senha</label>
-            <input type="password" name="senha" placeholder="Confirme sua senha" class="form-control">
+            <input type="password" name="confirma_senha" placeholder="Confirme sua senha" class="form-control" required>
           </div>
         </div>
       </div>
@@ -38,13 +39,13 @@ include_once('layout/sidebar.php');
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cpf">CPF:</label>
-             <input type="text" name="cpf" id="cpf" class="form-control">
+             <input type="text" name="cpf" id="cpf" class="form-control cpf" required>
            </div>
          </div>
          <div class="col-md-9 col-sm-12">
            <div class="form-group">
              <label for="nome">Nome:</label>
-             <input type="text" name="nome" id="nome" class="form-control">
+             <input type="text" name="nome" id="nome" class="form-control" required>
            </div>
          </div>
        </div>
@@ -52,32 +53,28 @@ include_once('layout/sidebar.php');
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="telefone">Telefone:</label>
-             <input type="text" name="telefone" id="telefone" class="form-control">
+             <input type="text" name="telefone" id="telefone" class="form-control fone">
            </div>
          </div>
-         <div class="col-md-6 col-sm-12">
+
+          <div class="col-md-6 col-sm-12">
            <div class="form-group">
-             <label for="email">E-mail:</label>
-             <input type="email" name="email" id="email" class="form-control">
+             <label for="cep">CEP:</label>
+             <input type="text" name="cep" id="cep" class="form-control cep">
            </div>
          </div>
        </div>
        
 
        <div class="row">
-         <div class="col-md-3 col-sm-12">
-           <div class="form-group">
-             <label for="cep">CEP:</label>
-             <input type="text" name="cep" id="cep" class="form-control">
-           </div>
-         </div>
-         <div class="col-md-6 col-sm-12">
+         
+         <div class="col-md-8 col-sm-12">
            <div class="form-group">
              <label for="logradouro">Logradouro:</label>
              <input type="text" name="logradouro" id="logradouro" class="form-control">
            </div>
          </div>
-         <div class="col-md-3 col-sm-12">
+         <div class="col-md-4 col-sm-12">
            <div class="form-group">
              <label for="numero">Número:</label>
              <input type="text" name="numero" id="numero" class="form-control">

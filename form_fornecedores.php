@@ -6,17 +6,18 @@ include_once('layout/sidebar.php');
 
 <div class="col">
 <h2>Novo Fornecedor</h2>
+<?php include_once('layout/mensagens.php'); ?>
   <div class="card">
     <a href="javascript:history.back(-1)" title="" class="btn btn-secondary w-25">
       <i class="fas fa-arrow-left"></i> Voltar
       </a>
     <div class="card-body">
-     <form>
+     <form action="gerencia_fornecedores.php?acao=salvar" method="post">
        <div class="row">
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cpf">CNPJ:</label>
-             <input type="text" name="cpf" id="cpf" class="form-control">
+             <input type="text" name="cpf" id="cnpj" class="form-control cpf">
            </div>
          </div>
          <div class="col-md-9 col-sm-12">
@@ -36,7 +37,7 @@ include_once('layout/sidebar.php');
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="telefone">Telefone:</label>
-             <input type="text" name="telefone" id="telefone" class="form-control">
+             <input type="text" name="telefone" id="telefone" class="form-control fone">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
@@ -59,7 +60,7 @@ include_once('layout/sidebar.php');
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cep">CEP:</label>
-             <input type="text" name="cep" id="cep" class="form-control">
+             <input type="text" name="cep" id="cep" class="form-control cep">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">

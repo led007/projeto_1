@@ -8,7 +8,7 @@ $itens_menu = [
 		'opcoes' => [
 			['nome' => 'Clientes', 'link' => 'clientes.php'],
 			['nome' => 'Fornecedores', 'link' => 'fornecedores.php'],
-			['nome' => 'Colaboradores', 'link' => 'equipamentos.php'],
+			['nome' => 'Colaboradores', 'link' => 'colaboradores.php'],
 			['nome' => 'Equipamentos', 'link' => 'equipamentos.php'],
 			['nome' => 'Produtos', 'link' => 'produtos.php'],
 			['nome' => 'Serviços', 'link' => 'servicos.php'],
