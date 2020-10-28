@@ -65,7 +65,7 @@ while ($i < count($fornecedores)):
                 <a href="#" class="btn btn-success">
                   <i class="fas fa-edit"></i>
                 </a>
-                <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id'];?>" class="btn btn-danger">
+                <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id'];?>&acao=deletar" class="btn btn-danger">
                   <i class="fas fa-trash" onclick="return confirm('Deseja realmente excluir?')"></i>
                 </a>
               </td>

@@ -1,14 +1,23 @@
 <?php 
+include_once('bd/conexao.php');
+
+
+$sql = "SELECT * FROM clientes";
+$qr = mysqli_query($conexao, $sql);
+$clientes = mysqli_fetch_all($qr, MYSQLI_ASSOC);
+
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
-include_once('bd/clientes.php');//lista de clientes em array
+
  ?>
 <div class="col">
-  <h2>Gestão de clientes</h2>
+<h2 class="titulo">Gestão de clientes</h2>
+<span class="badge badge-info totais">Total: <?php echo count($clientes); ?></span>
+<div class="clear"></div>
+<?php include_once('layout/mensagens.php'); ?>
   <div class="card">
     <div class="card-body">
-
       <a href="form_cliente.php" class="btn btn-primary" style="float: right">
         <i class="fas fa-user"></i> Novo cliente
       </a>
@@ -47,7 +56,7 @@ include_once('bd/clientes.php');//lista de clientes em array
         <a href="#" class="btn btn-warning">
           <i class="fas fa-edit"></i>
         </a>
-        <a href="#" class="btn btn-danger">
+        <a href="gerencia_clientes.php?id=<?php echo $cliente['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente deletar?')">
           <i class="fas fa-trash"></i>
         </a>
       </td>
@@ -67,8 +76,8 @@ include_once('bd/clientes.php');//lista de clientes em array
       <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
     </ul>
   </nav>
-    </div>
   </div>
+</div>
 </div>
 
 <?php 

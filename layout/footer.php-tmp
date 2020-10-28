@@ -26,6 +26,7 @@ Deprecated: The each() function is deprecated. This message will be suppressed o
       });
 
       $('.cpf').mask('999.999.999-99');
+      $('.cnpj').mask('99.999.999/9999-99');
       $('.fone').mask('(99) 99999-9999');
       $('.cep').mask('99999-999');
 

@@ -2,14 +2,14 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
-include_once('bd/categorias.php');
  ?>
 
  <div class="col">
 <h2>Novo Serviço</h2>
+<?php include_once('layout/mensagens.php'); ?>
       <div class="card">
         <div class="card-body">
-         <form>
+         <form action="gerencia_servicos.php?acao=salvar" method="post">
            <div class="row">
              <div class="col-md-3 col-sm-12">
                <div class="form-group">
@@ -43,12 +43,23 @@ include_once('bd/categorias.php');
                  <select name="categoria" id="categoria" class="form-control">
                    <option value="">Escolha</option>
                    <?php foreach($categorias as $categoria): ?>
-                   <option value="<?php echo $categoria['nome'] ?>"><?php echo $categoria['nome'] ?></option>
+                   <option value="<?php echo $categoria['categoria'] ?>"><?php echo $categoria['categoria'] ?></option>
                   <?php endforeach; ?>
                  </select>
                </div>
              </div>
+             <div class="col-md-6 col-sm-12">
+               <div class="form-group">
+                 <label for="usuario_id">Usuário:</label>
+              <input type="text" name="usuario_id" value="1" placeholder="" readonly="" class="form-control">   
            </div>
+         </div>
+         <div class="col-md-6 col-sm-12">
+               <div class="form-group">
+                 <label for="categoria_id">Categoria:</label>
+               <input type="text" name="categoria_id" value="1" placeholder="" readonly="" class="form-control">
+               </div>
+               </div>  
            <div class="row">
              <div class="col">
                <button type="submit" class="btn btn-primary w-100">
@@ -57,7 +68,6 @@ include_once('bd/categorias.php');
            </div>
 
          </form>
-
 
         </div>
       </div>

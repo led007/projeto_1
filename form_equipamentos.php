@@ -7,7 +7,7 @@ include_once('layout/sidebar.php');
   <h2>Novo equipamento</h2>
   <div class="card">
     <div class="card-body">
-      <form>
+      <form action="gerencia_equipamentos.php?acao=salvar" method="post">
 
         <div class="row">
           <div class="col-md-6 col-sm-12 form-group">

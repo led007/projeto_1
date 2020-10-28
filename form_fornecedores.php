@@ -7,17 +7,22 @@ include_once('layout/sidebar.php');
 <div class="col">
 <h2>Novo Fornecedor</h2>
 <?php include_once('layout/mensagens.php'); ?>
+   <div class="row "> 
+    <div class="offset-9 col-3 w-100">
+      
+    <a href="javascript:history.back(-1)" title="" class="btn btn-secondary w-100 ">
+         <i class="fas fa-arrow-left"></i> Voltar
+         </a>
+       </div>
+    </div>
   <div class="card">
-    <a href="javascript:history.back(-1)" title="" class="btn btn-secondary w-25">
-      <i class="fas fa-arrow-left"></i> Voltar
-      </a>
     <div class="card-body">
      <form action="gerencia_fornecedores.php?acao=salvar" method="post">
        <div class="row">
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cpf">CNPJ:</label>
-             <input type="text" name="cpf" id="cnpj" class="form-control cpf">
+             <input type="text" name="cpf" id="cnpj" class="form-control cnpj">
            </div>
          </div>
          <div class="col-md-9 col-sm-12">
@@ -50,8 +55,8 @@ include_once('layout/sidebar.php');
        <div class="row">
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
-             <label for="convenio">Nome do Contrato:</label>
-             <input type="text" name="convenio" id="convenio" class="form-control">
+             <label for="nome_contato">Nome do Contato:</label>
+             <input type="text" name="nome_contato" id="nome_contato" class="form-control">
            </div>
          </div>
        </div>

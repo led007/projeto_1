@@ -145,7 +145,8 @@ include_once('layout/sidebar.php');
        </div>
 
      </form>
-
+<!-- <input type="text" name="usuario_id" value="1" placeholder="" >
+<input type="text" name="categoria_id" value="1" placeholder=""> -->
 
     </div>
   </div>

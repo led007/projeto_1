@@ -23,15 +23,13 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 
 	header("Location: fornecedores.php?mensagem={$mensagem}&alert={$alert}");
 } else if($acao == 'salvar') {
-
-		
 	
 	$cnpj = $_POST['cpf'];
 	$nome = $_POST['nome'];
 	$razao = $_POST['nome'];
 	$telefone = $_POST['telefone'];
 	$email = $_POST['email'];
-	$n_contrato = $_POST['convenio'];
+	$nome_contato = $_POST['nome_contato'];
 	$cep = $_POST['cep'];
 	$logradouro = $_POST['logradouro'];
 	$numero = $_POST['numero'];
@@ -43,7 +41,7 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$sql = "INSERT INTO fornecedores 
 			(razao_social, fantasia, cnpj, email, telefone, nome_contato, logradouro, numero, complemento, bairro, cidade, estado,usuario_id) 
 			VALUES
-			('$razao', '$nome','$cnpj', '$email', '$telefone', '$n_contrato', '$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
+			('$razao', '$nome','$cnpj', '$email', '$telefone', '$nome_contato', '$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
 
 
 	mysqli_query($conexao, $sql);
