@@ -37,19 +37,48 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$bairro = $_POST['bairro'];
 	$cidade = $_POST['cidade'];
 	$estado = $_POST['estado'];
+	$id = $_POST['id'];
 
-	$sql = "INSERT INTO fornecedores 
-			(razao_social, fantasia, cnpj, email, telefone, nome_contato, logradouro, numero, complemento, bairro, cidade, estado,usuario_id) 
+	if($id == ''){
+
+		$sql = "INSERT INTO fornecedores 
+			(razao_social, fantasia, cnpj, email, telefone, nome_contato, cep ,logradouro, numero, complemento, bairro, cidade, estado,usuario_id) 
 			VALUES
-			('$razao', '$nome','$cnpj', '$email', '$telefone', '$nome_contato', '$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
+			('$razao', '$nome','$cnpj', '$email', '$telefone', '$nome_contato', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
 
 
-	mysqli_query($conexao, $sql);
+	}else {
+		$sql = "UPDATE fornecedores SET 
+		razao_social = '{$razao}',
+		fantasia = '{$nome}',
+		cnpj = '{$cnpj}',
+		email = '{$email}',
+		telefone = '{$telefone}',
+		nome_contato = '{$nome_contato}',
+		cep = '{$cep}',
+		logradouro = '{$logradouro}',
+		numero = '{$numero}' ,
+		complemento = '{$complemento}' ,
+		bairro = '{$bairro}' ,
+		cidade = '{$cidade}',
+		estado = '{$estado}'
+		WHERE id = {$id};";
+
+	}
+
+
 	
 
-	$mensagem = 'Salvo com sucesso!';
+	if(mysqli_query($conexao, $sql)) {
+		$mensagem = 'Salvo com sucesso!';
+		$alert = 'success';
 
-	header("Location: fornecedores.php?mensagem={$mensagem}&alert=success");
+	}else {
+		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
+		$alert = 'danger';
+	}
+
+	header("Location: fornecedores.php?mensagem={$mensagem}&alert={$alert}");
 
 }
 

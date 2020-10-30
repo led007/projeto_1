@@ -39,6 +39,7 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$email = $_POST['email'];
 	$telefone = $_POST['telefone'];
 	$logradouro = $_POST['logradouro'];
+	$cep = $_POST['cep'];
 	$numero = $_POST['numero'];
 	$complemento = $_POST['complemento'];
 	$bairro = $_POST['bairro'];
@@ -59,6 +60,7 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 			cpf, 
 			email, 
 			telefone, 
+			cep, 
 			logradouro, 
 			numero, 
 			complemento, 
@@ -67,14 +69,19 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 			estado, 
 			senha) 
 			VALUES
-			('$nome', '$cpf', '$email', '$telefone', '$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado', '$senha');";
+			('$nome', '$cpf', '$email', '$telefone', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado', '$senha');";
 
 
-	mysqli_query($conexao, $sql);
+	if(mysqli_query($conexao, $sql)) {
+		$mensagem = 'Salvo com sucesso!';
+		$alert = 'success';
 
-	$mensagem = 'Salvo com sucesso!';
+	}else {
+		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
+		$alert = 'danger';
+	}
 
-	header("Location: colaboradores.php?mensagem={$mensagem}&alert=success");
+	header("Location: colaboradores.php?mensagem={$mensagem}&alert=$alert");
 }
 
 

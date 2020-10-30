@@ -17,14 +17,20 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 } else if($acao == 'salvar') {
 
 	$categoria = $_POST['categoria'];
+	$tipo = $_POST['tipo'];
 
-	$sql = "INSERT INTO categoria (categoria) VALUES ('$categoria');";
+	$sql = "INSERT INTO categoria (categoria, tipo) VALUES ('$categoria', '$tipo');";
 
-	mysqli_query($conexao, $sql);
+	if(mysqli_query($conexao, $sql)) {
+		$mensagem = 'Salvo com sucesso!';
+		$alert = 'success';
 
-	$mensagem = 'Salvo com sucesso!';
+	}else {
+		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
+		$alert = 'danger';
+	}
 
-	header("Location: categorias.php?mensagem={$mensagem}&alert=success");
+	header("Location: categorias.php?mensagem={$mensagem}&alert={$alert}");
 }
 
 

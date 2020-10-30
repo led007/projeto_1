@@ -63,7 +63,7 @@
                 <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerCliente">
                   <i class="fas fa-eye"></i>
                 </a>
-                <a href="#" class="btn btn-success">
+                <a href="form_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>" class="btn btn-success">
                   <i class="fas fa-edit"></i>
                 </a>
                 <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>&acao=deletar" class="btn btn-danger">

@@ -18,17 +18,12 @@ include_once ('layout/sidebar.php');
              <input type="text" name="cpf" id="cpf" class="form-control cpf" required>
            </div>
          </div>
-         <div class="col-md-7 col-sm-12">
+         <div class="col-md-8 col-sm-12">
            <div class="form-group">
              <label for="nome">Nome:</label>
              <input type="text" name="nome" id="nome" class="form-control" required>
+              <input type="hidden" name="usuario_id" id="usuario" value="1" class="form-control" readonly>
            </div>
-          </div>
-          <div class="col-md-1 col-sm-12">
-            <div class="form-group">
-              <label for="usuario">Usuário</label>
-              <input type="text" name="usuario_id" id="usuario" value="1" class="form-control" readonly>
-            </div>
           </div>
          </div>
 

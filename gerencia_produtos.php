@@ -9,44 +9,46 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 
 	$sql = "DELETE FROM produtos WHERE id = {$id}";
 
-
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Excluído com sucesso!';
-		$alert = 'success';
+	    $alert = 'success';
 
 	}else {
 		$mensagem = 'Erro ao tentar excluir, verifique se o dado não está relacionado com outro registro!';
 		$alert = 'danger';
-
 	}
 
+	header("Location: produtos.php?mensagem={$mensagem}&alert={$alert}");
 
-	header("Location: equipamentos.php?mensagem={$mensagem}&alert={$alert}");
-} else if($acao == 'salvar') {
-	
+} else if ($acao == 'salvar') {
+
 	$codigo = $_POST['codigo'];
 	$nome = $_POST['nome'];
 	$categoria_id = $_POST['categoria_id'];
+	$estoque = $_POST['estoque'];
+	$data_compra = $_POST['data_compra'];
+	$usuario_id = $_POST['usuario_id'];
 	$preco = $_POST['preco'];
-	$codigo = $_POST['codigo'];
-	$data_compra = $_POST['data_compra'] . ' ' . date('H:m:i');
-	$id = $_POST['id'];
 
-	if($id == '') {
-		$sql = "INSERT INTO produtos 
-				(nome, categoria_id, preco, data_compra, codigo, usuario_id) 
-				VALUES
-				('$nome', '$categoria_id','$preco', '$data_compra','$codigo', 1);";
-	} else {
-		$sql = "UPDATE produtos SET
-					nome = '{$nome}',
-					categoria_id = '{$categoria_id}',
-					preco = '{$preco}',
-					data_compra = '{$data_compra}',
-					codigo = '{$codigo}'
-				WHERE id = {$id}";
+	if($codigo == '' || $nome == '' || $preco == ''){
+
+		$mensagem = "Código, Nome e Preço são obrigatórios";
+
+		header("Location: form_produtos.php?mensagem=}$mensagem}&alert=danger");
+		exit;
 	}
-
+	
+	$sql = "INSERT INTO produtos 
+			(codigo, 
+			nome, 
+			categoria_id, 
+			estoque,
+			data_compra, 
+			usuario_id,
+			preco 
+			) 
+			VALUES
+			('$codigo', '$nome', '$categoria_id', '$estoque', '$data_compra', '$usuario_id', $preco);";
 
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';
@@ -56,13 +58,9 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
 		$alert = 'danger';
 	}
-	
 
-
-	header("Location: equipamentos.php?mensagem={$mensagem}&alert={$alert}");
+	header("Location: produtos.php?mensagem={$mensagem}&alert={$alert}");
 
 }
 
-
-
- ?>
+?>

@@ -1,4 +1,10 @@
 <?php 
+include_once('bd/conexao.php');
+
+$sql = "SELECT * FROM categoria";
+$qr = mysqli_query($conexao, $sql);
+$categorias = mysqli_fetch_all($qr, MYSQLI_ASSOC);
+
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
@@ -39,27 +45,17 @@ include_once('layout/sidebar.php');
              </div>
              <div class="col-md-4 col-sm-12">
                <div class="form-group">
-                 <label for="categoria">Categoria:</label>
-                 <select name="categoria" id="categoria" class="form-control">
+                 <label for="categoria_id">Categoria:</label>
+                 <select name="categoria_id" id="categoria_id" class="form-control">
                    <option value="">Escolha</option>
                    <?php foreach($categorias as $categoria): ?>
-                   <option value="<?php echo $categoria['categoria'] ?>"><?php echo $categoria['categoria'] ?></option>
+                   <option value="<?php echo $categoria['id'] ?>"><?php echo $categoria['categoria'] ?></option>
                   <?php endforeach; ?>
                  </select>
+              <input type="hidden" name="usuario_id" value="1"  class="form-control">   
                </div>
-             </div>
-             <div class="col-md-6 col-sm-12">
-               <div class="form-group">
-                 <label for="usuario_id">Usuário:</label>
-              <input type="text" name="usuario_id" value="1" placeholder="" readonly="" class="form-control">   
+             </div> 
            </div>
-         </div>
-         <div class="col-md-6 col-sm-12">
-               <div class="form-group">
-                 <label for="categoria_id">Categoria:</label>
-               <input type="text" name="categoria_id" value="1" placeholder="" readonly="" class="form-control">
-               </div>
-               </div>  
            <div class="row">
              <div class="col">
                <button type="submit" class="btn btn-primary w-100">

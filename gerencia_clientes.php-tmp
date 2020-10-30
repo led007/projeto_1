@@ -67,11 +67,16 @@ if (isset($_GET['id']) && $acao == 'deletar') {
 	//echo $sql;
 	exit;
 
-	mysqli_query($conexao, $sql);
+	if (mysqli_query($conexao, $sql)) {
+		$mensagem = 'Salvo com sucesso!';
+		$alert    = 'success';
 
-	$mensagem = 'Salvo com sucesso!';
+	} else {
+		$mensagem = 'Erro ao salvar: '.mysqli_error($conexao);
+		$alert    = 'danger';
+	}
 
-	header("Location: clientes.php?mensagem={$mensagem}&alert=success");
+	header("Location: clientes.php?mensagem={$mensagem}&alert={$alert}");
 }
 
 ?>

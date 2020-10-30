@@ -1,30 +1,35 @@
 
 Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
 <?php
+include_once ('bd/conexao.php');
+
+$sql        = "SELECT * FROM categoria WHERE tipo = 'Produtos'";
+$qr         = mysqli_query($conexao, $sql);
+$categorias = mysqli_fetch_all($qr, MYSQLI_ASSOC);
+
 include_once ('layout/header.php');
 include_once ('layout/menu.php');
 include_once ('layout/sidebar.php');
-include_once ('bd/categorias.php');
 ?>
 <div class="col">
   <h2>Novo Produto</h2>
-  <div class="card">
+<?php include_once ('layout/mensagens.php');?>
+<div class="card">
     <div class="card-body">
-      <form>
-
+      <form action="gerencia_produtos.php?acao=salvar" method="post">
         <div class="row">
           <div class="col-md-6 col-sm-12 form-group">
             <label for="codigo">Codigo</label>
             <input type="text" name="codigo" placeholder="Informe o codigo do Produto" class="form-control">
           </div>
           <div class="col-md-6 col-sm-12 form-group">
-            <label for="categoria">Categoría</label>
-            <select class="form-control" name="categoria">
+            <label for="categoria_id">Categoría</label>
+            <select class="form-control" name="categoria_id">
               <option value="">Escolha</option>
 <?php foreach ($categorias as $categoria):?>
-              <option value="<?=$categoria['nome']?>"><?=$categoria['nome']?></option>
+              <option value="<?=$categoria['id']?>"><?=$categoria['categoria']?></option>
 <?php endforeach;?>
-</select>
+            </select>
           </div>
         </div>
         <div class="row">
@@ -38,9 +43,17 @@ include_once ('bd/categorias.php');
           </div>
           <div class="col-md-4 col-sm-12 form-group">
             <label for="data_compra">Data de compra</label>
-            <input type="date" name="data_compra" class="form-control" id="data_compra" readonly>
+            <input type="date" name="data_compra" class="form-control" id="data_compra" readonly value="<?php echo date('Y-m-d')?>">
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-12 form-group">
+            <label for="nome">Estoque</label>
+            <input type="number" name="estoque" placeholder="" class="form-control">
+              <input type="hidden" name="usuario_id" value="1" >
+          </div>
+        </div>
+
         <div class="row">
          <div class="col">
            <button type="submit" class="btn btn-primary w-100">

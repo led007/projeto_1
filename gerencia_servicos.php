@@ -42,11 +42,16 @@ $sql = "INSERT INTO servicos
 			VALUES
 			('$codigo', '$nome', '$descricao', '$preco', '$categoria_id', '$usuario_id');";
 
-	mysqli_query($conexao, $sql);
+	if(mysqli_query($conexao, $sql)) {
+		$mensagem = 'Salvo com sucesso!';
+		$alert = 'success';
 
-	$mensagem = 'Salvo com sucesso!';
+	}else {
+		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
+		$alert = 'danger';
+	}
 
-	header("Location: servicos.php?mensagem={$mensagem}&alert=success");
+	header("Location: servicos.php?mensagem={$mensagem}&alert=$alert");
 
 }
 

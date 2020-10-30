@@ -9,7 +9,8 @@ $acao = $_GET['acao']??'redirect';
 if (isset($_GET['id']) && $acao == 'deletar') {
 	$id = $_GET['id'];
 
-	$sql = "DELETE FROM servicos WHERE id = {$id}";
+	$sql = "DELETE FROM produtos WHERE id = {$id}";
+
 	if (mysqli_query($conexao, $sql)) {
 		$mensagem = 'Excluído com sucesso!';
 		$alert    = 'success';
@@ -19,27 +20,37 @@ if (isset($_GET['id']) && $acao == 'deletar') {
 		$alert    = 'danger';
 	}
 
-	header("Location: servicos.php?mensagem={$mensagem}&alert={alert}");
+	header("Location: produtos.php?mensagem={$mensagem}&alert={$alert}");
 
 } else if ($acao == 'salvar') {
 
 	$codigo       = $_POST['codigo'];
 	$nome         = $_POST['nome'];
-	$descricao    = $_POST['descricao'];
-	$preco        = $_POST['preco'];
 	$categoria_id = $_POST['categoria_id'];
+	$estoque      = $_POST['estoque'];
+	$data_compra  = $_POST['data_compra'];
 	$usuario_id   = $_POST['usuario_id'];
+	$preco        = $_POST['preco'];
 
-	$sql = "INSERT INTO servicos
+	if ($codigo == '' || $nome == '' || $preco == '') {
+
+		$mensagem = "Código, Nome e Preço são obrigatórios";
+
+		header("Location: form_produtos.php?mensagem=}$mensagem}&alert=danger");
+		exit;
+	}
+
+	$sql = "INSERT INTO produtos
 			(codigo,
 			nome,
-			descricao,
-			preco,
 			categoria_id,
-			usuario_id
+			estoque,
+			data_compra,
+			usuario_id,
+			preco
 			)
 			VALUES
-			('$codigo', '$nome', '$descricao', '$preco', '$categoria_id', '$usuario_id');
+			('$codigo', '$nome', '$categoria_id', '$estoque', '$data_compra', '$usuario_id', $preco);
 ";
 
 	if (mysqli_query($conexao, $sql)) {
@@ -51,7 +62,7 @@ if (isset($_GET['id']) && $acao == 'deletar') {
 		$alert    = 'danger';
 	}
 
-	header("Location: servicos.php?mensagem={$mensagem}&alert=$alert");
+	header("Location: produtos.php?mensagem={$mensagem}&alert={$alert}");
 
 }
 

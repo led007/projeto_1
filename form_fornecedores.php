@@ -2,7 +2,18 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
- ?>
+include_once('bd/conexao.php');
+
+if (isset($_GET['id']) && $_GET['id'] != '') {
+  $sql_forne = "SELECT * FROM fornecedores WHERE id = " .  $_GET['id'];
+  $qr_forne = mysqli_query($conexao, $sql_forne);
+  $fornecedor = mysqli_fetch_assoc($qr_forne);
+
+}else{ 
+$fornecedor ='';
+
+}
+?>
 
 <div class="col">
 <h2>Novo Fornecedor</h2>
@@ -22,19 +33,20 @@ include_once('layout/sidebar.php');
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cpf">CNPJ:</label>
-             <input type="text" name="cpf" id="cnpj" class="form-control cnpj">
+             <input type="text" name="cpf" id="cnpj" class="form-control cnpj" value="<?php echo ($fornecedor != '' ? $fornecedor['cnpj'] : ''); ?>">
+             <input type="hidden" name="id" value="<?php echo ($fornecedor != '' ? $fornecedor['id'] : ''); ?>" placeholder="">
            </div>
          </div>
          <div class="col-md-9 col-sm-12">
            <div class="form-group">
              <label for="nome">Nome Fantasia:</label>
-             <input type="text" name="nome" id="nome" class="form-control">
+             <input type="text" name="nome" id="nome" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['fantasia'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
              <label for="nome">Razão Social:</label>
-             <input type="text" name="nome" id="nome" class="form-control">
+             <input type="text" name="nome" id="nome" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['razao_social'] : ''); ?>">
            </div>
          </div>
        </div>
@@ -42,13 +54,13 @@ include_once('layout/sidebar.php');
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="telefone">Telefone:</label>
-             <input type="text" name="telefone" id="telefone" class="form-control fone">
+             <input type="text" name="telefone" id="telefone" class="form-control fone" value="<?php echo ($fornecedor != '' ? $fornecedor['telefone'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="email">E-mail:</label>
-             <input type="email" name="email" id="email" class="form-control">
+             <input type="email" name="email" id="email" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['email'] : ''); ?>">
            </div>
          </div>
        </div>
@@ -56,7 +68,7 @@ include_once('layout/sidebar.php');
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
              <label for="nome_contato">Nome do Contato:</label>
-             <input type="text" name="nome_contato" id="nome_contato" class="form-control">
+             <input type="text" name="nome_contato" id="nome_contato" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['nome_contato'] : ''); ?>">
            </div>
          </div>
        </div>
@@ -65,19 +77,19 @@ include_once('layout/sidebar.php');
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cep">CEP:</label>
-             <input type="text" name="cep" id="cep" class="form-control cep">
+             <input type="text" name="cep" id="cep" class="form-control cep" value="<?php echo ($fornecedor != '' ? $fornecedor['cep'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="logradouro">Logradouro:</label>
-             <input type="text" name="logradouro" id="logradouro" class="form-control">
+             <input type="text" name="logradouro" id="logradouro" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['logradouro'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="numero">Número:</label>
-             <input type="text" name="numero" id="numero" class="form-control">
+             <input type="text" name="numero" id="numero" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['numero'] : ''); ?>">
            </div>
          </div>
        </div>
@@ -85,19 +97,19 @@ include_once('layout/sidebar.php');
          <div class="col-md-4 col-sm-12">
            <div class="form-group">
              <label for="complemento">Complemento:</label>
-             <input type="text" name="complemento" id="complemento" class="form-control">
+             <input type="text" name="complemento" id="complemento" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['complemento'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="bairro">Bairro:</label>
-             <input type="text" name="bairro" id="bairro" class="form-control">
+             <input type="text" name="bairro" id="bairro" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['bairro'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cidade">Cidade:</label>
-             <input type="text" name="cidade" id="cidade" class="form-control">
+             <input type="text" name="cidade" id="cidade" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['cidade'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-2 col-sm-12">
