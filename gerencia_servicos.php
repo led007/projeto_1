@@ -29,18 +29,27 @@ $descricao = $_POST['descricao'];
 $preco = $_POST['preco'];
 $categoria_id = $_POST['categoria_id'];
 $usuario_id = $_POST['usuario_id'];
+$id = $_POST['id'];
 
-	
-$sql = "INSERT INTO servicos 
-			(codigo, 
-			nome, 
-			descricao, 
-			preco,
-			categoria_id, 
-			usuario_id 
-			) 
+if($id == ''){
+
+	$sql = "INSERT INTO servicos 
+			(codigo,  nome,  descricao,  preco, categoria_id,  usuario_id ) 
 			VALUES
 			('$codigo', '$nome', '$descricao', '$preco', '$categoria_id', '$usuario_id');";
+} else {
+	$sql = "UPDATE servicos 
+			SET
+				codigo = '{$codigo}',
+				nome = '{$nome}',
+				descricao = '{$descricao}',
+				preco = '{$preco}',
+				categoria_id = '{$categoria_id}',
+				usuario_id = '{$usuario_id}'
+			WHERE id = $id";
+}
+
+
 
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';

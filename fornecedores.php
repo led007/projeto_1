@@ -4,7 +4,16 @@
   include_once('layout/menu.php');
   include_once('layout/sidebar.php');
 
-  $sql = "SELECT * FROM fornecedores";
+if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
+  $pesquisa = $_GET['pesquisa'];
+
+  $sql = "SELECT * FROM fornecedores WHERE fantasia LIKE '%{$pesquisa}%' OR cnpj LIKE '%{$pesquisa}%'";
+}else {
+$sql = "SELECT * FROM fornecedores";
+}
+
+
+
   $qr = mysqli_query($conexao, $sql);
   $fornecedores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
  
@@ -38,7 +47,7 @@
               <th>CNPJ</th>
               <th>Telefone</th>
               <th>E-mail</th>
-              <th>Cidade</th>
+              <th>Cidade/UF</th>
               <th class="acao">Ações</th>
             </tr>
             <?php 
@@ -55,15 +64,13 @@
                   <?php echo $fornecedores[$i]['email'] ?>
                 </a>
               </td>
-              <td><?php echo $fornecedores[$i]['cidade'] 
-             
-              ?></td>
+              <td><?php echo $fornecedores[$i]['cidade'] . '/' . $fornecedores[$i]['estado']  ?></td>
 
               <td>
                 <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerCliente">
                   <i class="fas fa-eye"></i>
                 </a>
-                <a href="form_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>" class="btn btn-success">
+                <a href="form_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>" class="btn btn-warning">
                   <i class="fas fa-edit"></i>
                 </a>
                 <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>&acao=deletar" class="btn btn-danger">
@@ -77,7 +84,10 @@
           ?>
             
           </table>
-
+          <?php if(empty($fornecedores)): ?>
+            <div class="alert alert-info">Nenhuma informação encontrada.</div>
+          <?php endif; ?>
+        </div>
           <nav aria-label="Navegação de página exemplo">
             <ul class="pagination">
 

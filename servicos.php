@@ -57,7 +57,7 @@ include_once('layout/sidebar.php');
           <a href="#" class="btn btn-secondary">
             <i class="fas fa-eye"></i>
           </a>
-          <a href="#" class="btn btn-warning">
+          <a href="form_servicos.php?id=<?php echo $servico['id']; ?>" class="btn btn-warning">
             <i class="fas fa-edit"></i>
           </a>
            <a href="gerencia_servicos.php?id=<?php echo $servico['id']; ?>" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">

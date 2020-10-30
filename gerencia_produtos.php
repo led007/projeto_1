@@ -29,6 +29,7 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$data_compra = $_POST['data_compra'];
 	$usuario_id = $_POST['usuario_id'];
 	$preco = $_POST['preco'];
+	$id = $_POST['id'];
 
 	if($codigo == '' || $nome == '' || $preco == ''){
 
@@ -38,17 +39,23 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 		exit;
 	}
 	
-	$sql = "INSERT INTO produtos 
-			(codigo, 
-			nome, 
-			categoria_id, 
-			estoque,
-			data_compra, 
-			usuario_id,
-			preco 
-			) 
+	if($id == ''){
+		$sql = "INSERT INTO produtos 
+			(codigo, nome, categoria_id, estoque, data_compra, usuario_id, preco) 
 			VALUES
 			('$codigo', '$nome', '$categoria_id', '$estoque', '$data_compra', '$usuario_id', $preco);";
+	} else {
+		$sql = "UPDATE produtos
+				SET 
+					codigo 			= '{$codigo}',
+					nome 			= '{$nome}',
+					categoria_id 	= '{$categoria_id}',
+					estoque 		= '{$estoque}',
+					data_compra 	= '{$data_compra}',
+					usuario_id 		= '{$usuario_id}',
+					preco 			= '{$preco}'
+				WHERE id = $id";
+	}
 
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';

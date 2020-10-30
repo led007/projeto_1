@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $acao == 'deletar'){
 
 	header("Location: clientes.php?mensagem={$mensagem}&alert={$alert}");
 
-}else if($acao == 'salvar') {
+}else if($acao == 'salvar'){
 
 	$nome = $_POST['nome'];
 	$cpf = $_POST['cpf'];
@@ -37,6 +37,7 @@ if(isset($_GET['id']) && $acao == 'deletar'){
 	$estado = $_POST['estado'];
 	$usuario_id = $_POST['usuario_id'];
 	$cep = $_POST['cep'];
+	$id = $_POST['id'];
 
 	if($nome == '' || $cpf == '' || $email == ''){
 
@@ -46,21 +47,40 @@ if(isset($_GET['id']) && $acao == 'deletar'){
 		exit;
 	}
 
-	$sql = "INSERT INTO clientes 
-			(nome,
-			cpf,
-			email,
-			telefone,
-			convenio,
-			num_convenio,
-			logradouro,
-			complemento,
-			numero,
-			bairro,
-			cidade,
-			estado,
-			usuario_id,
-			cep) VALUES ('$nome','$cpf','$email','$telefone','$convenio','$num_convenio','$logradouro','$complemento','$numero','$bairro','$cidade','$estado','$usuario_id','$cep');";
+	if($id == ''){
+		$sql = "INSERT INTO clientes 
+				(nome,
+				cpf,
+				email,
+				telefone,
+				convenio,
+				num_convenio,
+				logradouro,
+				complemento,
+				numero,
+				bairro,
+				cidade,
+				estado,
+				usuario_id,
+				cep) VALUES ('$nome','$cpf','$email','$telefone','$convenio','$num_convenio','$logradouro','$complemento','$numero','$bairro','$cidade','$estado','$usuario_id','$cep');";
+	}else {
+		$sql = "UPDATE clientes SET  
+					nome = '{$nome}',
+					cpf = '{$cpf}',
+					email = '{$email}',
+					telefone = '{$telefone}',
+					convenio = '{$convenio}',
+					num_convenio = '{$num_convenio}',
+					logradouro = '{$logradouro}',
+					complemento = '{$complemento}',
+					numero = '{$numero}',
+					bairro = '{$bairro}',
+					cidade = '{$cidade}',
+					estado = '{$estado}',
+					usuario_id = '{$usuario_id}',
+					cep = '{$cep}'
+				WHERE id = '{$id}'";
+	}
 
 			//echo $sql; exit;
 

@@ -4,7 +4,17 @@ include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
 
+
+if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
+  $pesquisa = $_GET['pesquisa'];
+
+  $sql = "SELECT * FROM colaboradores WHERE nome LIKE '%{$pesquisa}%' OR cpf LIKE '%{$pesquisa}%'";
+}else {
+
 $sql = "SELECT * FROM colaboradores;";
+
+}
+
 $qr = mysqli_query($conexao, $sql);
 $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 
@@ -52,6 +62,9 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
         </tr>
       <?php endforeach; ?>
       </table>
+      <?php if(empty($colaboradores)): ?>
+            <div class="alert alert-info">Nenhuma informação encontrada.</div>
+          <?php endif; ?>
 
       <nav aria-label="Navegação de página exemplo" class="pagination">
         <ul class="pagination">

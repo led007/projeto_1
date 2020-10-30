@@ -25,8 +25,8 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 } else if($acao == 'salvar') {
 	
 	$cnpj = $_POST['cpf'];
-	$nome = $_POST['nome'];
-	$razao = $_POST['nome'];
+	$fantasia = $_POST['fantasia'];
+	$razao_social = $_POST['razao_social'];
 	$telefone = $_POST['telefone'];
 	$email = $_POST['email'];
 	$nome_contato = $_POST['nome_contato'];
@@ -44,13 +44,13 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 		$sql = "INSERT INTO fornecedores 
 			(razao_social, fantasia, cnpj, email, telefone, nome_contato, cep ,logradouro, numero, complemento, bairro, cidade, estado,usuario_id) 
 			VALUES
-			('$razao', '$nome','$cnpj', '$email', '$telefone', '$nome_contato', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
+			('$razao_social', '$fantasia','$cnpj', '$email', '$telefone', '$nome_contato', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
 
 
 	}else {
 		$sql = "UPDATE fornecedores SET 
-		razao_social = '{$razao}',
-		fantasia = '{$nome}',
+		razao_social = '{$razao_social}',
+		fantasia = '{$fantasia}',
 		cnpj = '{$cnpj}',
 		email = '{$email}',
 		telefone = '{$telefone}',
@@ -67,7 +67,6 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	}
 
 
-	
 
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';

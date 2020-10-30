@@ -20,8 +20,17 @@ if (isset($_GET['id']) && $acao == 'deletar') {
 
 	$categoria = $_POST['categoria'];
 	$tipo      = $_POST['tipo'];
+	$id        = $_POST['id'];
 
-	$sql = "INSERT INTO categoria (categoria, tipo) VALUES ('$categoria', '$tipo');";
+	if ($id == '') {
+		$sql = "INSERT INTO categoria (categoria, tipo) VALUES ('$categoria', '$tipo');";
+
+	} else {
+		$sql = "UPDATE categoria SET
+					categoria = '{$categoria}',
+					tipo = '{$tipo}'
+				WHERE id = {$id}";
+	}
 
 	if (mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';

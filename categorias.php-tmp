@@ -48,7 +48,7 @@ include_once ('layout/sidebar.php');
         <a href="#" class="btn btn-secondary">
           <i class="fas fa-eye"></i>
         </a>
-        <a href="#" class="btn btn-warning">
+        <a href="form_categorias.php?id=<?php echo $categoria['id'];?>" class="btn btn-warning">
           <i class="fas fa-edit"></i>
         </a>
         <a href="gerencia_categorias.php?id=<?php echo $categoria['id'];?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">

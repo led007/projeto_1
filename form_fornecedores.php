@@ -3,6 +3,7 @@ include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
 include_once('bd/conexao.php');
+include_once('bd/estados.php');
 
 if (isset($_GET['id']) && $_GET['id'] != '') {
   $sql_forne = "SELECT * FROM fornecedores WHERE id = " .  $_GET['id'];
@@ -39,14 +40,14 @@ $fornecedor ='';
          </div>
          <div class="col-md-9 col-sm-12">
            <div class="form-group">
-             <label for="nome">Nome Fantasia:</label>
-             <input type="text" name="nome" id="nome" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['fantasia'] : ''); ?>">
+             <label for="fantasia">Fantasia:</label>
+             <input type="text" name="fantasia" id="fantasia" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['fantasia'] : ''); ?>">
            </div>
          </div>
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
-             <label for="nome">Razão Social:</label>
-             <input type="text" name="nome" id="nome" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['razao_social'] : ''); ?>">
+             <label for="razao_social">Razão Social:</label>
+             <input type="text" name="razao_social" id="razao_social" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['razao_social'] : ''); ?>">
            </div>
          </div>
        </div>
@@ -117,33 +118,9 @@ $fornecedor ='';
              <label for="estado">Estado:</label>
              <select name="estado" class="form-control" id="estado">
                <option value=""></option>
-               <option value="AC">AC</option>
-               <option value="AL">AL</option>
-               <option value="AP">AP</option>
-               <option value="AM">AM</option>
-               <option value="BA">BA</option>
-               <option value="CE">CE</option>
-               <option value="DF">DF</option>
-               <option value="ES">ES</option>
-               <option value="GO">GO</option>
-               <option value="MA">MA</option>
-               <option value="MT">MT</option>
-               <option value="MS">MS</option>
-               <option value="MG">MG</option>
-               <option value="PA">PA</option>
-               <option value="PB">PB</option>
-               <option value="PR">PR</option>
-               <option value="PE">PE</option>
-               <option value="PI">PI</option>
-               <option value="RJ">RJ</option>
-               <option value="RN">RN</option>
-               <option value="RS">RS</option>
-               <option value="RO">RO</option>
-               <option value="RR">RR</option>
-               <option value="SC">SC</option>
-               <option value="SP">SP</option>
-               <option value="SE">SE</option>
-               <option value="TO">TO</option>
+               <?php foreach ($estados as $estado) : ?>
+                 <option value="<?php echo $estado['sigla'] ?>" <?php echo ($fornecedor != '' && $fornecedor['estado'] == $estado['sigla'] ? 'selected' : '') ?>><?php echo $estado['sigla'] ?></option>
+               <?php endforeach; ?>
              </select>
            </div>
          </div>
