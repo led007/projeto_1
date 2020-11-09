@@ -1,4 +1,5 @@
 <?php 
+include_once('valida_sessao.php');
 include_once('bd/conexao.php');
 
 $acao = $_GET['acao'] ?? 'redirect';
@@ -24,10 +25,14 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	header("Location: colaboradores.php?mensagem={$mensagem}&alert={$alert}");
 } else if($acao == 'salvar') {
 
-	$senha = md5($_POST['senha']);
-	$confirma_senha = md5($_POST['confirma_senha']);
+	$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+	/*if (password_verify('12345', $hash)) {
+	    echo 'Password is valid!';
+	} else {
+	    echo 'Invalid password.'. '<br>';
+	}*/
 
-	if($senha != $confirma_senha) {
+	if($_POST['senha'] != '' && $_POST['senha'] != $_POST['confirma_senha']) {
 		$mensagem = "A senha e a confirmação devem ser iguais";
 
 		header("Location: form_usuario.php?mensagem={$mensagem}&alert=danger");
@@ -45,14 +50,17 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$bairro = $_POST['bairro'];
 	$cidade = $_POST['cidade'];
 	$estado = $_POST['estado'];
+	$id = $_POST['id'];
 
-	if($nome == '' || $cpf == '' || $senha == '' || $email == '' ) {
+
+	if($nome == '' || $cpf == '' || $email == '' ) {
 		$mensagem = "Nome, CPF, email e senha são obrigatórios!";
 
 		header("Location: form_usuario.php?mensagem={$mensagem}&alert=danger");
 		exit;
 	}
 
+	if($id == ''){
 
 
 	$sql = "INSERT INTO colaboradores 
@@ -70,7 +78,26 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 			senha) 
 			VALUES
 			('$nome', '$cpf', '$email', '$telefone', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado', '$senha');";
-
+		}else {
+			if($_POST['senha'] != '') {
+				$string_senha = ", senha = '{$senha}' ";
+			} else {
+				$string_senha = '';
+			}
+			$sql = "UPDATE colaboradores SET 
+				nome = '{$nome}',
+				cpf = '{$cpf}',
+				email = '{$email}',
+				cep = '{$cep}',
+				logradouro = '{$logradouro}',
+				numero = '{$numero}' ,
+				complemento = '{$complemento}' ,
+				bairro = '{$bairro}' ,
+				cidade = '{$cidade}',
+				estado = '{$estado}'
+				{$string_senha}
+				WHERE id = {$id};";
+		}
 
 	if(mysqli_query($conexao, $sql)) {
 		$mensagem = 'Salvo com sucesso!';
@@ -82,6 +109,13 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	}
 
 	header("Location: colaboradores.php?mensagem={$mensagem}&alert=$alert");
+} else if(isset($_GET['id']) && $acao == 'get') {
+	$id = $_GET['id'];
+
+	$sql = "SELECT nome, cpf, email,telefone, logradouro,numero, bairro, cidade, estado,cep FROM colaboradores WHERE id = {$id}";
+	$qr = mysqli_query($conexao, $sql);
+	$colaborador = mysqli_fetch_assoc($qr);
+	echo json_encode($colaborador);
 }
 
 

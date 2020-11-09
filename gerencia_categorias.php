@@ -1,4 +1,5 @@
-<?php 
+<?php
+include_once('valida_sessao.php');
 include_once('bd/conexao.php');
 
 $acao = $_GET['acao'] ?? 'redirect';
@@ -8,9 +9,7 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	$id = $_GET['id'];
 
 	$sql = "DELETE FROM categoria WHERE id = {$id}";
-
 	$qr = mysqli_query($conexao, $sql);
-
 	$mensagem = 'Excluído com sucesso!';
 
 	header("Location: categorias.php?mensagem={$mensagem}&alert=success");
@@ -39,6 +38,13 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 	}
 
 	header("Location: categorias.php?mensagem={$mensagem}&alert={$alert}");
+}else if(isset($_GET['id']) && $_GET['id'] != '' && $_GET['acao'] == 'get' ) {
+	$id = $_GET['id'];
+	$sql = "SELECT categoria, tipo FROM categoria WHERE id = {$id}";
+	$qr = mysqli_query($conexao, $sql);
+	$categoria = mysqli_fetch_assoc($qr);
+
+	echo json_encode($categoria);
 }
 
 

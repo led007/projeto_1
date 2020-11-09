@@ -1,9 +1,9 @@
 <?php
+include_once('valida_sessao.php');
 include_once('bd/conexao.php');
 
 $acao = $_GET['acao'] ?? 'redirect';
 //deletar, salvar, alterar
-
 if(isset($_GET['id']) && $acao == 'deletar'){
 	$id = $_GET['id'];
 
@@ -94,6 +94,14 @@ if(isset($_GET['id']) && $acao == 'deletar'){
 	}
 
 	header("Location: clientes.php?mensagem={$mensagem}&alert={$alert}");
+
+}else if(isset($_GET['id']) && $acao == 'get') {
+	$id = $_GET['id'];
+
+	$sql = "SELECT * FROM clientes WHERE id = {$id}";
+	$qr = mysqli_query($conexao, $sql);
+	$cliente = mysqli_fetch_assoc($qr);
+	echo json_encode($cliente);
 }
 
 

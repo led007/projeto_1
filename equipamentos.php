@@ -8,7 +8,9 @@ include_once('bd/conexao.php');
 if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
   $pesquisa = $_GET['pesquisa'];
 
-  $sql = "SELECT * FROM produtos WHERE nome LIKE '%{$pesquisa}%' OR codigo LIKE '%{$pesquisa}%'";
+  $sql = "SELECT p.*, c.categoria FROM produtos p 
+          LEFT JOIN categoria c ON p.categoria_id = c.id
+          WHERE c.tipo = 'Equipamentos' AND (nome LIKE '%{$pesquisa}%' OR codigo LIKE '%{$pesquisa}%')";
 }else {
 
 $sql = "SELECT p.*, c.categoria FROM produtos p 
@@ -52,7 +54,9 @@ $sql = "SELECT p.*, c.categoria FROM produtos p
             <td><?= (isset($produto['categoria']) ? $produto['categoria'] : 'Não definida') ?></td>
             <td><?= $produto['data_compra'] ?? 'Não informada' ?></td>
             <td>
-              <a href="#" class="btn btn-secondary">
+              <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(
+                <?php echo $produto['id']; ?>
+              )">
                 <i class="fas fa-eye"></i>
               </a>
               <a href="form_equipamentos.php?id=<?= $produto['id'] ?>" class="btn btn-warning">
@@ -85,3 +89,40 @@ $sql = "SELECT p.*, c.categoria FROM produtos p
 <?php 
   include_once('layout/footer.php');
 ?>
+<script>
+  function verDados(id) {
+    $.ajax({
+      url: 'gerencia_equipamentos.php?acao=get&id=' + id,
+      type: 'GET',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(dados) {
+      var dados_json = JSON.parse(dados);
+      var texto = '';
+      Object.keys(dados_json).forEach(function(k)
+      {
+        var th = k.replace('_', ' ');
+        texto += `<p><strong
+                  style = "text-transform:
+                  capitalize">
+                  ${th}</strong>: ${dados_json[k]
+                   ?? ''}</p>`;
+    });
+
+      $('#titulo-modal').html('Produto: ' +
+        dados_json.nome);
+      $('#corpo-modal').html(texto);
+
+
+  })
+    .fail(function() {
+      alert('Dados não encontrados.')
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+
+  }
+</script>

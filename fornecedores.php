@@ -1,35 +1,13 @@
 <?php 
-  include_once('bd/conexao.php');
   include_once('layout/header.php');
   include_once('layout/menu.php');
   include_once('layout/sidebar.php');
-
-if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
-  $pesquisa = $_GET['pesquisa'];
-
-  $sql = "SELECT * FROM fornecedores WHERE fantasia LIKE '%{$pesquisa}%' OR cnpj LIKE '%{$pesquisa}%'";
-}else {
-$sql = "SELECT * FROM fornecedores";
-}
-
-
-
-  $qr = mysqli_query($conexao, $sql);
-  $fornecedores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
- 
-
-
 ?>
          <div class="col">
           <h2 class="titulo">Gestão de fornecedores</h2>
-          <span class="badge badge-info totais">Total: <?php echo count($fornecedores); ?></span>
+          <span class="badge badge-info totais">Total:</span>
           <div class="clear"></div>
-
-          <?php if(isset($_GET['mensagem'])): ?>
-          <div class="alert alert-<?php echo $_GET['alert'] ?? 'success'; ?>" id="alert-mensagem">
-         <?php echo $_GET['mensagem']; ?>
-         </div>
-          <?php endif; ?>
+          <?php include_once('layout/mensagens.php'); ?>
 
           <div class="card">
             <div class="card-body">
@@ -42,6 +20,7 @@ $sql = "SELECT * FROM fornecedores";
               <br>
               <br>
           <table class="table table-striped table-hover">
+             <thead>
             <tr>
               <th>Nome Fantasia</th>
               <th>CNPJ</th>
@@ -50,43 +29,13 @@ $sql = "SELECT * FROM fornecedores";
               <th>Cidade/UF</th>
               <th class="acao">Ações</th>
             </tr>
-            <?php 
-              $i = 0;
-              while($i < count($fornecedores)):
-            
-            ?>
-            <tr>
-              <td><?php echo $fornecedores[$i]['razao_social'] ?></td>
-              <td><?php echo $fornecedores[$i]['cnpj'] ?></td>
-              <td><?php echo $fornecedores[$i]['telefone'] ?></td>
-              <td>
-                <a href="mailto:<?php echo $fornecedores[$i]['email'] ?>">
-                  <?php echo $fornecedores[$i]['email'] ?>
-                </a>
-              </td>
-              <td><?php echo $fornecedores[$i]['cidade'] . '/' . $fornecedores[$i]['estado']  ?></td>
-
-              <td>
-                <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerCliente">
-                  <i class="fas fa-eye"></i>
-                </a>
-                <a href="form_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>" class="btn btn-warning">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <a href="gerencia_fornecedores.php?id=<?php echo $fornecedores[$i]['id']; ?>&acao=deletar" class="btn btn-danger">
-                  <i class="fas fa-trash" onclick="return confirm('Deseja realmente excluir?')"></i>
-                </a>
-              </td>
-            </tr>
-          <?php
-            $i++;
-            endwhile; 
-          ?>
-            
+             </thead>
+             <tbody>
+            </tbody>
+          
           </table>
-          <?php if(empty($fornecedores)): ?>
-            <div class="alert alert-info">Nenhuma informação encontrada.</div>
-          <?php endif; ?>
+        <div class="alert alert-info" id="mensagem-vazio" style="display: none;">Nenhuma informação encontrada.</div>
+
         </div>
           <nav aria-label="Navegação de página exemplo">
             <ul class="pagination">
@@ -107,22 +56,97 @@ $sql = "SELECT * FROM fornecedores";
 include_once('layout/footer.php');
 ?>
 
+<script>
+  $(document).ready(function() {
+    carregaDados();
+  });
+  function verDados(id) {
+    $.ajax({
+      url: `api/fornecedores.php?id=${id}&acao=exibir`,
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      var texto = '';
+      Object.keys(data.dados).forEach(function(index){
+        var th = index.replace('_', ' ');
+        texto += `<p><strong style="text-transform: capitalize">${th}: </strong> ${data.dados[index] ?? ''}</p>`;
+      })
 
-    <div class="modal fade" id="modalVerCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Título do modal</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            Dados do fornecedor
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+      $('#titulo-modal').html(`Fornecedor: ${data.dados.fornecedor}` );
+      $('#corpo-modal').html(texto);
+    })
+    .fail(function() {
+      alert('Erro ao buscar os dados.');
+    })
+    .always(function() {
+     $('#carregando').fadeOut();
+    });
+    
+  }
+   function carregaDados() {
+    $.ajax({
+      url: 'api/fornecedores.php?acao=listar',
+      type: 'GET',
+      dataType: 'json',
+     beforeSend: function() {
+       $('#carregando').fadeIn();
+     }
+    })
+    .done(function(data) {
+      if(data.dados.length < 1) {
+        $('#mensagem-vazio').fadeIn();
+      }
+      $('#total').html(data.dados.length);
+      var tbody = '';
+      $.each(data.dados,function(index, value){
+        tbody += `<tr>
+                  <td>${value.cnpj}</td>
+                  <td>${value.fantasia}</td>
+                  <td>${value.razao_social}</td>
+                  <td>${value.telefone}</td>
+                  <td>${value.email}</td>
+                  <td>${value.nome_contato}</td>
+                  <td>${value.cep}</td>
+                  <td>${value.logradouro}</td>
+                  <td>${value.numero}</td>
+                  <td>${value.complemento}</td>
+                  <td>${value.bairro}</td>
+                  <td>${value.cidade}</td>
+                 
+                          
+                  <td>
+                    <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="form_fornecedores.php?id=" class="btn btn-warning">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="gerencia_fornecedores.php?id=${value.id}&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+
+                </tr>`;
+      });
+
+      $('tbody').html(tbody);
+    })
+    .fail(function(data) {
+      console.log(data);
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+
+
+
+
+
+
+</script>

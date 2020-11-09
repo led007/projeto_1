@@ -38,6 +38,7 @@ if($id == ''){
 			VALUES
 			('$codigo', '$nome', '$descricao', '$preco', '$categoria_id', '$usuario_id');";
 } else {
+
 	$sql = "UPDATE servicos 
 			SET
 				codigo = '{$codigo}',
@@ -62,6 +63,13 @@ if($id == ''){
 
 	header("Location: servicos.php?mensagem={$mensagem}&alert=$alert");
 
+} else if(isset($_GET['id']) && $acao == 'get') {
+	$id = $_GET['id'];
+
+	$sql = "SELECT codigo, nome, descricao as 'Descrição', CONCAT('R$ ',FORMAT(preco, 2, 'pt_BR')) as preco FROM servicos WHERE id = {$id}";
+	$qr = mysqli_query($conexao, $sql);
+	$servico = mysqli_fetch_assoc($qr);
+	echo json_encode($servico);
 }
 
 ?>

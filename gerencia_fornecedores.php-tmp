@@ -78,6 +78,13 @@ if (isset($_GET['id']) && $acao == 'deletar') {
 
 	header("Location: fornecedores.php?mensagem={$mensagem}&alert={$alert}");
 
+} else if (isset($_GET['id']) && $acao == 'get') {
+	$id  = $_GET['id'];
+	$sql = "SELECT * FROM fornecedores WHERE id = {$id}";
+	$qr  = mysqli_query($conexao, $sql);
+
+	$fornecedor = mysqli_fetch_assoc($qr);
+	echo json_encode($fornecedor);
 }
 
 ?>

@@ -4,8 +4,21 @@ Deprecated: The each() function is deprecated. This message will be suppressed o
 include_once ('bd/conexao.php');
 
 //Monta a consulta a ser executada
-$sql = "SELECT s.*, c.categoria FROM servicos s
-LEFT JOIN categoria c ON s.categoria_id = c.id";
+if (isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
+	$pesquisa = $_GET['pesquisa'];
+
+	$sql = "SELECT s.*, c.categoria FROM servicos s
+  LEFT JOIN categoria c ON s.categoria_id = c.id
+        WHERE s.codigo LIKE '%{$pesquisa}%'
+        OR s.nome LIKE '%{$pesquisa}%'
+        OR s.descricao LIKE '%{$pesquisa}%'
+        OR s.preco LIKE '%{$pesquisa}%'
+        OR c.categoria LIKE '%{$pesquisa}%'";
+
+} else {
+	$sql = "SELECT s.*, c.categoria FROM servicos s
+  LEFT JOIN categoria c ON s.categoria_id = c.id";
+}
 
 //Execução da consulta ao banco de dados
 $qr = mysqli_query($conexao, $sql);
@@ -54,21 +67,25 @@ include_once ('layout/sidebar.php');
         <td><?=number_format($servico['preco'], 2, ',', '.')?></td>
         <td><?=$servico['categoria']?></td>
         <td>
-          <a href="#" class="btn btn-secondary">
+          <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(
+<?php echo $servico['id'];?>
+               )">
             <i class="fas fa-eye"></i>
           </a>
           <a href="form_servicos.php?id=<?php echo $servico['id'];?>" class="btn btn-warning">
             <i class="fas fa-edit"></i>
           </a>
-           <a href="gerencia_servicos.php?id=<?php echo $servico['id'];?>" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+           <a href="gerencia_servicos.php?id=<?php echo $servico['id'];?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
           <i class="fas fa-trash"></i>
           </a>
         </td>
       </tr>
 <?php endforeach;?>
 </table>
-
-    <nav ar
+<?php if (empty($servicos)):?>
+<div class="alert alert-info">Nenhuma Informação encontrada.</div>
+<?php endif;?>
+<nav ar
     ia-label="Navegação de página exemplo">
       <ul class="pagination">
 
@@ -82,6 +99,39 @@ include_once ('layout/sidebar.php');
       </div>
     </div>
   </div>
-<?php include_once ('layout/footer.php')
+<?php include_once ('layout/footer.php');
 
 ?>
+<script>
+  function verDados(id) {
+    $.ajax({
+      url: 'gerencia_servicos.php?acao=get&id=' + id,
+      type: 'GET',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(dados) {
+      var dados_json = JSON.parse(dados);
+      var texto = '';
+      Object.keys(dados_json).forEach(function(k) {
+          var th = k.replace('_', ' ');
+          texto += `<p><strong
+                style ="text-transform: capitalize">
+                ${th}</strong>: ${dados_json[k] ?? ''}</p>`;
+      });
+
+      $('#titulo-modal').html('Servico: ' + dados_json.nome);
+      $('#corpo-modal').html(texto);
+
+
+    })
+    .fail(function() {
+      alert('Dados não Encontrados.')
+      })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+
+    }
+</script>

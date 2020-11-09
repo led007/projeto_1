@@ -1,0 +1,12 @@
+
+Deprecated: The each() function is deprecated. This message will be suppressed on further calls in C:\Users\trazo\AppData\Roaming\Sublime Text 3\Packages\PHPTools\php.tools\codeFormatter.php on line 54
+<?php
+session_start();
+$pagina_atual = explode('/', $_SERVER['PHP_SELF']);
+
+if (end($pagina_atual) != 'index.php' && !isset($_SESSION['nome'])) {
+	session_destroy();
+	header("Location: index.php?alert=danger&mensagem=Sem permissão de acesso.");
+	exit;
+}
+?>

@@ -1,8 +1,20 @@
 <?php 
 include_once('bd/conexao.php');
 
+if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
 
-$sql = "SELECT * FROM clientes";
+  $pesquisa = $_GET['pesquisa'];
+
+  $sql = "SELECT * FROM clientes 
+      WHERE 
+        nome LIKE '%{$pesquisa}%' OR 
+        email LIKE '%{$pesquisa}%'";
+
+} else {
+  $sql = "SELECT * FROM clientes;";
+}
+
+
 $qr = mysqli_query($conexao, $sql);
 $clientes = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 
@@ -50,10 +62,10 @@ include_once('layout/sidebar.php');
       </td>
       <td><?= $cliente['convenio']  ?></td>
       <td>
-        <a href="#" class="btn btn-secondary">
+        <a href="#" class="btn btn-secondary"  data-toggle="modal" data-target="#modalVerDados" onclick="verDados(<?php echo $cliente['id']; ?>)"> 
           <i class="fas fa-eye"></i>
         </a>
-        <a href="form_cliente.php?id=<?= $cliente['id'] ?>" class="btn btn-warning">
+        <a href="form_cliente.php?id=<?php echo $cliente['id'] ?>" class="btn btn-warning">
           <i class="fas fa-edit"></i>
         </a>
         <a href="gerencia_clientes.php?id=<?php echo $cliente['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente deletar?')">
@@ -65,6 +77,9 @@ include_once('layout/sidebar.php');
     <!-- /linha para cada elemento -->
 
   </table>
+    <?php if(empty($clientes)): ?>
+    <div class="alert alert-info">Nenhuma informação encontrada.</div>
+  <?php endif; ?>
 
   <nav aria-label="Navegação de página exemplo">
     <ul class="pagination">
@@ -81,5 +96,33 @@ include_once('layout/sidebar.php');
 </div>
 
 <?php 
-  include_once('layout/footer.php');
+include_once('layout/footer.php');
 ?>
+
+<script>
+  function verDados(id) {
+    $.ajax({
+      url: 'gerencia_clientes.php?acao=get&id=' + id,
+      type: 'GET',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(dados){
+      var dados_json = JSON.parse(dados);
+      var texto = '';
+      Object.keys(dados_json).forEach(function(k){
+          var th = k.replace('_', ' ');
+          texto += `<p><strong style="text-transform: capitalize">${th}</strong>: ${dados_json[k] ?? ''}</p>`;
+      }); 
+      $('#titulo-modal').html('Cliente: ' + dados_json.nome);
+      $('#corpo-modal').html(texto);
+    })
+    .fail(function(){
+      aler('Dados nao encontrados');
+    })
+    .always(function(){
+      $('#carregando').fadeOut();
+    });
+  }
+</script>

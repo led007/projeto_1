@@ -33,7 +33,7 @@ include_once('bd/estados.php');
              <label for="nome">Nome:</label>
              <input type="text" name="nome" id="nome" class="form-control" required value="<?php echo ($cliente != '' ? $cliente['nome'] : ''); ?>">
 
-              <input type="hidden" name="usuario_id" id="usuario" class="form-control" readonly value="<?php echo ($cliente != '' ? $cliente['usuario_id'] : ''); ?>">
+              <input type="hidden" name="usuario_id" id="usuario" class="form-control" readonly value="1">
 
               <input type="hidden" name="id" value="<?php echo ($cliente != '' ? $cliente['id'] : ''); ?>" placeholder="">
            </div>

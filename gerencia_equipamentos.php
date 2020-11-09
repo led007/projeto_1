@@ -61,6 +61,13 @@ if(isset($_GET['id']) && $acao == 'deletar') {
 
 	header("Location: equipamentos.php?mensagem={$mensagem}&alert={$alert}");
 
+} else if(isset($_GET['id']) && $acao == 'get') {
+	$id = $_GET['id'];
+
+	$sql = "SELECT nome, categoria_id, preco, DATE_FORMAT(data_compra, '%d/%m/%Y às %H:%i:%s') as data_compra, codigo FROM produtos WHERE id = {$id}";
+	$qr = mysqli_query($conexao, $sql);
+	$produto = mysqli_fetch_assoc($qr);
+	echo json_encode($produto);
 }
 
 

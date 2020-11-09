@@ -49,10 +49,10 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
           <td><?= $colaborador['email'] ?></td>
           <td><?= $colaborador['telefone'] ?></td>
           <td>
-            <a href="#" class="btn btn-success">
+            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(<?php echo $colaborador['id']; ?>)">
               <i class="fas fa-eye"></i>
             </a>
-            <a href="#" class="btn btn-warning">
+            <a href="form_usuario.php?id=<?php echo $colaborador['id']; ?>" class="btn btn-warning">
               <i class="fas fa-edit"></i>
             </a>
             <a href="gerencia_colaboradores.php?id=<?php echo $colaborador['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente deletar?')">
@@ -83,3 +83,34 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 <?php 
 include_once('layout/footer.php');
 ?>
+<script>
+  function verDados(id) {
+    $.ajax({
+      url: 'gerencia_colaboradores.php?acao=get&id=' + id,
+      type: 'GET',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(dados) {
+      var dados_json = JSON.parse(dados);
+      var texto = '';
+      Object.keys(dados_json).forEach(function(k){
+          var th = k.replace('_', ' ');
+          texto += `<p><strong style="text-transform: capitalize">${th}</strong>: ${dados_json[k] ?? ''}</p>`;
+      });
+
+       $('#titulo-modal').html('Colaborador: ' + dados_json.nome);
+       $('#corpo-modal').html(texto);
+
+
+    })
+    .fail(function() {
+      alert('Dados não encontrados.')
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+</script>

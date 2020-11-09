@@ -1,15 +1,4 @@
 <?php 
-include_once('bd/conexao.php');
-
-//Monta a consulta a ser executada
-$sql = "SELECT * FROM categoria";
-
-//Execução da consulta ao banco de dados
-$qr = mysqli_query($conexao, $sql);
-
-//Armazenando o resultado em uma variável
-$categorias = mysqli_fetch_all($qr, MYSQLI_ASSOC);
-
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
@@ -17,7 +6,7 @@ include_once('layout/sidebar.php');
 ?>
 <div class="col">
   <h2 class="titulo">Categorias</h2>
-  <span class="badge badge-info totais">Total: <?php echo count($categorias); ?></span>
+  <span class="badge badge-info totais">Total: <span id="total"></span> <?php //echo count($categorias); ?></span>
   <div class="clear"></div>
 
 <?php include_once('layout/mensagens.php'); ?>
@@ -33,31 +22,19 @@ include_once('layout/sidebar.php');
       <br>
       <br>
       <table class="table table-striped table-hover">
-      <tr>
+      <thead>
+        <tr>
         <th>Categoria</th>
         <th>Tipo</th>
         <th class="acao">Ações</th>
       </tr>
-      <?php foreach($categorias as $chave => $categoria): ?>
-    <tr>
-      <td><?= $categoria['categoria'] ?></td>
-      <td><?= $categoria['tipo'] ?></td>
-    
-      <td>
-        <a href="#" class="btn btn-secondary">
-          <i class="fas fa-eye"></i>
-        </a>
-        <a href="form_categorias.php?id=<?php echo $categoria['id']; ?>" class="btn btn-warning">
-          <i class="fas fa-edit"></i>
-        </a>
-        <a href="gerencia_categorias.php?id=<?php echo $categoria['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
-          <i class="fas fa-trash"></i>
-        </a>
-      </td>
-
-    </tr>
-  <?php endforeach; ?>
+      </thead>
+    <tbody>
+    </tbody>
   </table>
+
+    <div class="alert alert-info" id="mensagem-vazio" style="display: none;">Nenhuma informação encontrada.</div>
+
 
   <nav aria-label="Navegação de página exemplo">
     <ul class="pagination">
@@ -75,3 +52,82 @@ include_once('layout/sidebar.php');
 <?php 
 include_once('layout/footer.php');
 ?>
+<script>
+  $(document).ready(function() {
+    carregaDados();
+  });
+  function verDados(id) {
+    $.ajax({
+      url: `api/categorias.php?id=${id}&acao=exibir`,
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      var texto = '';
+      Object.keys(data.dados).forEach(function(index){
+        var th = index.replace('_', ' ');
+        texto += `<p><strong style="text-transform: capitalize">${th}: </strong> ${data.dados[index] ?? ''}</p>`;
+      })
+
+      $('#titulo-modal').html(`Categoria: ${data.dados.categoria}` );
+      $('#corpo-modal').html(texto);
+
+    })
+    .fail(function() {
+      alert('Erro ao buscar os dados.')
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+
+  function carregaDados() {
+    $.ajax({
+      url: 'api/categorias.php?acao=listar',
+      type: 'GET',
+      dataType: 'json',
+     beforeSend: function() {
+       $('#carregando').fadeIn();
+     }
+    })
+    .done(function(data) {
+      if(data.dados.length < 1) {
+        $('#mensagem-vazio').fadeIn();
+      }
+      $('#total').html(data.dados.length);
+      var tbody = '';
+      $.each(data.dados,function(index, value){
+        tbody += `<tr>
+                  <td>${value.categoria}</td>
+                  <td>${value.tipo}</td>
+                
+                  <td>
+                    <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="form_categorias.php?id=" class="btn btn-warning">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="gerencia_categorias.php?id=${value.id}&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+
+                </tr>`;
+      });
+
+      $('tbody').html(tbody);
+    })
+    .fail(function(data) {
+      console.log(data);
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+</script>

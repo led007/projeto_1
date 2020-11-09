@@ -6,7 +6,15 @@ include_once ('layout/header.php');
 include_once ('layout/menu.php');
 include_once ('layout/sidebar.php');
 
-$sql = "SELECT * FROM colaboradores;";
+if (isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
+	$pesquisa = $_GET['pesquisa'];
+
+	$sql = "SELECT * FROM colaboradores WHERE nome LIKE '%{$pesquisa}%' OR cpf LIKE '%{$pesquisa}%'";
+} else {
+
+	$sql = "SELECT * FROM colaboradores;";
+
+}
 
 $qr            = mysqli_query($conexao, $sql);
 $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
@@ -42,10 +50,10 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
           <td><?=$colaborador['email']?></td>
           <td><?=$colaborador['telefone']?></td>
           <td>
-            <a href="#" class="btn btn-success">
+            <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(<?php echo $colaborador['id'];?>)">
               <i class="fas fa-eye"></i>
             </a>
-            <a href="#" class="btn btn-warning">
+            <a href="form_usuario.php?id=<?php echo $colaborador['id'];?>" class="btn btn-warning">
               <i class="fas fa-edit"></i>
             </a>
             <a href="gerencia_colaboradores.php?id=<?php echo $colaborador['id'];?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente deletar?')">
@@ -55,8 +63,10 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
         </tr>
 <?php endforeach;?>
 </table>
-
-      <nav aria-label="Navegação de página exemplo" class="pagination">
+<?php if (empty($colaboradores)):?>
+<div class="alert alert-info">Nenhuma informação encontrada.</div>
+<?php endif;?>
+<nav aria-label="Navegação de página exemplo" class="pagination">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
           <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -73,3 +83,34 @@ $colaboradores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 <?php
 include_once ('layout/footer.php');
 ?>
+<script>
+  function verDados(id) {
+    $.ajax({
+      url: 'gerencia_colaboradores.php?acao=get&id=' + id,
+      type: 'GET',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(dados) {
+      var dados_json = JSON.parse(dados);
+      var texto = '';
+      Object.keys(dados_json).forEach(function(k){
+          var th = k.replace('_', ' ');
+          texto += `<p><strong style="text-transform: capitalize">${th}</strong>: ${dados_json[k] ?? ''}</p>`;
+      });
+
+       $('#titulo-modal').html('Colaborador: ' + dados_json.nome);
+       $('#corpo-modal').html(texto);
+
+
+    })
+    .fail(function() {
+      alert('Dados não encontrados.')
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+
+  }
+</script>
