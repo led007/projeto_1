@@ -1,38 +1,13 @@
 <?php 
-include_once('bd/conexao.php');
-
-//Monta a consulta a ser executada
-if (isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
-  $pesquisa = $_GET['pesquisa'];
-
-  $sql = "SELECT s.*, c.categoria FROM servicos s
-  LEFT JOIN categoria c ON s.categoria_id = c.id
-        WHERE s.codigo LIKE '%{$pesquisa}%'
-        OR s.nome LIKE '%{$pesquisa}%'
-        OR s.descricao LIKE '%{$pesquisa}%'
-        OR s.preco LIKE '%{$pesquisa}%'
-        OR c.categoria LIKE '%{$pesquisa}%'";
-
-}else {
-  $sql = "SELECT s.*, c.categoria FROM servicos s
-  LEFT JOIN categoria c ON s.categoria_id = c.id";
-}
-
-//Execução da consulta ao banco de dados
-$qr = mysqli_query($conexao, $sql);
-
-//Armazenando o resultado em uma variável
-$servicos = mysqli_fetch_all($qr, MYSQLI_ASSOC);
-
-
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
+
 ?>
 
 <div class="col">
 <h2 class="titulo">Serviços</h2>
-<span class="badge badge-info totais">Total: <?php echo count($servicos); ?></span>
+<span class="badge badge-info totais">Total: <?php //echo count($servicos); ?></span>
 <div class="clear"></div>
   <?php include_once('layout/mensagens.php'); ?>
 
@@ -46,10 +21,9 @@ include_once('layout/sidebar.php');
           <i class="fas fa-arrow-left"></i> Voltar
         </a>
         <br>
-        <br>
-
-      
+        <br>    
     <table class="table table-striped table-hover">
+      <thead>
       <tr>
         <th>Código</th>
         <th>Nome</th>
@@ -58,33 +32,12 @@ include_once('layout/sidebar.php');
         <th>Categoria</th>
         <th>Ações</th>
       </tr>
-      <?php foreach($servicos as $servico): 
-        ?>
-      <tr>
-        <td><?= $servico['codigo'] ?></td>
-        <td><?= $servico['nome'] ?></td>
-        <td><?= $servico['descricao'] ?></td>
-        <td><?= number_format($servico['preco'],2,',','.') ?></td>
-        <td><?= $servico['categoria'] ?></td>
-        <td>
-          <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(
-               <?php echo $servico['id']; ?>
-               )">
-            <i class="fas fa-eye"></i>
-          </a>
-          <a href="form_servicos.php?id=<?php echo $servico['id']; ?>" class="btn btn-warning">
-            <i class="fas fa-edit"></i>
-          </a>
-           <a href="gerencia_servicos.php?id=<?php echo $servico['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
-          <i class="fas fa-trash"></i>
-          </a>
-        </td>
-      </tr>
-    <?php endforeach; ?>
+      </thead>
+      <tbody>
+      </tbody>
     </table>
-    <?php if (empty($servicos)): ?>
-      <div class="alert alert-info">Nenhuma Informação encontrada.</div>
-    <?php endif; ?>
+
+      <div class="alert alert-info" id="mensagem-vazio" style="display: none;">Nenhuma Informação encontrada.</div>
 
     <nav ar
     ia-label="Navegação de página exemplo">
@@ -104,25 +57,28 @@ include_once('layout/sidebar.php');
 
 ?>
 <script>
+  $(document).ready(function() {
+    carregaDados();
+  });
   function verDados(id) {
     $.ajax({
-      url: 'gerencia_servicos.php?acao=get&id=' + id,
+      url: `api/servicos.php?id=${id}&acao=exibir`,
       type: 'GET',
+      dataType: 'json',
       beforeSend: function() {
         $('#carregando').fadeIn();
       } 
     })
-    .done(function(dados) {
-      var dados_json = JSON.parse(dados);
+    .done(function(data) {
       var texto = '';
-      Object.keys(dados_json).forEach(function(k) {
-          var th = k.replace('_', ' ');
+      Object.keys(data.dados).forEach(function(index) {
+          var th = index.replace('_', ' ');
           texto += `<p><strong
                 style ="text-transform: capitalize">
-                ${th}</strong>: ${dados_json[k] ?? ''}</p>`;
+                ${th}</strong>: ${data.dados[index] ?? ''}</p>`;
       });
 
-      $('#titulo-modal').html('Servico: ' + dados_json.nome);
+      $('#titulo-modal').html(`Servico: ${data.dados.nome}` );
       $('#corpo-modal').html(texto);
 
 
@@ -133,6 +89,51 @@ include_once('layout/sidebar.php');
     .always(function() {
       $('#carregando').fadeOut();
     });
+
+    }
+
+    function carregaDados() {
+      $.ajax({
+        url: 'api/servicos.php?acao=listar',
+        type: 'GET',
+        dataType: 'json',
+        beforeSend: function() {
+          $('#carregando').fadeIn();
+        }
+      })
+      .done(function(data) {
+        if (data.dados.length < 1) {
+          $('#mensagem-vazio').fadeIn();
+        }
+        var tbody = '';
+        $.each(data.dados,function(index, value){
+          tbody += `<tr>
+                    <td>${value.codigo}</td>
+        <td>${value.nome}</td>
+        <td>${value.descricao}</td>
+        <td>${value.preco}</td>
+        <td>${value.categoria_id}</td>
+        <td>
+          <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
+            <i class="fas fa-eye"></i>
+          </a>
+          <a href="form_servicos.php?id=${value.id}" class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+          </a>
+           <a href="gerencia_servicos.php?id=${value.id}&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+          <i class="fas fa-trash"></i>
+          </a>
+        </td>
+      </tr>`;
+        });
+        $('tbody').html(tbody);
+      })
+      .fail(function(data) {
+        console.log(data);
+      })
+      .always(function() {
+        $('#carregando').fadeOut();
+      });
 
     }
 </script>

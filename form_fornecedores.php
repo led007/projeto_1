@@ -2,18 +2,7 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
-include_once('bd/conexao.php');
 include_once('bd/estados.php');
-
-if (isset($_GET['id']) && $_GET['id'] != '') {
-  $sql_forne = "SELECT * FROM fornecedores WHERE id = " .  $_GET['id'];
-  $qr_forne = mysqli_query($conexao, $sql_forne);
-  $fornecedor = mysqli_fetch_assoc($qr_forne);
-
-}else{ 
-$fornecedor ='';
-
-}
 ?>
 
 <div class="col">
@@ -29,25 +18,26 @@ $fornecedor ='';
     </div>
   <div class="card">
     <div class="card-body">
-     <form action="gerencia_fornecedores.php?acao=salvar" method="post">
+       <span id="mensagem"></span>
+     <form method="post" onsubmit="return false;">
        <div class="row">
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cpf">CNPJ:</label>
-             <input type="text" name="cpf" id="cnpj" class="form-control cnpj" value="<?php echo ($fornecedor != '' ? $fornecedor['cnpj'] : ''); ?>">
-             <input type="hidden" name="id" value="<?php echo ($fornecedor != '' ? $fornecedor['id'] : ''); ?>" placeholder="">
+             <input type="text" name="cpf" id="cnpj" class="form-control cnpj">
+             <input type="hidden" name="id" id="id" placeholder="">
            </div>
          </div>
          <div class="col-md-9 col-sm-12">
            <div class="form-group">
              <label for="fantasia">Fantasia:</label>
-             <input type="text" name="fantasia" id="fantasia" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['fantasia'] : ''); ?>">
+             <input type="text" name="fantasia" id="fantasia" class="form-control">
            </div>
          </div>
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
              <label for="razao_social">Razão Social:</label>
-             <input type="text" name="razao_social" id="razao_social" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['razao_social'] : ''); ?>">
+             <input type="text" name="razao_social" id="razao_social" class="form-control">
            </div>
          </div>
        </div>
@@ -55,13 +45,13 @@ $fornecedor ='';
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="telefone">Telefone:</label>
-             <input type="text" name="telefone" id="telefone" class="form-control fone" value="<?php echo ($fornecedor != '' ? $fornecedor['telefone'] : ''); ?>">
+             <input type="text" name="telefone" id="telefone" class="form-control fone">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="email">E-mail:</label>
-             <input type="email" name="email" id="email" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['email'] : ''); ?>">
+             <input type="email" name="email" id="email" class="form-control">
            </div>
          </div>
        </div>
@@ -69,7 +59,7 @@ $fornecedor ='';
          <div class="col-md-12 col-sm-12">
            <div class="form-group">
              <label for="nome_contato">Nome do Contato:</label>
-             <input type="text" name="nome_contato" id="nome_contato" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['nome_contato'] : ''); ?>">
+             <input type="text" name="nome_contato" id="nome_contato" class="form-control">
            </div>
          </div>
        </div>
@@ -78,19 +68,19 @@ $fornecedor ='';
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cep">CEP:</label>
-             <input type="text" name="cep" id="cep" class="form-control cep" value="<?php echo ($fornecedor != '' ? $fornecedor['cep'] : ''); ?>">
+             <input type="text" name="cep" id="cep" class="form-control cep">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
              <label for="logradouro">Logradouro:</label>
-             <input type="text" name="logradouro" id="logradouro" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['logradouro'] : ''); ?>">
+             <input type="text" name="logradouro" id="logradouro" class="form-control">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="numero">Número:</label>
-             <input type="text" name="numero" id="numero" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['numero'] : ''); ?>">
+             <input type="text" name="numero" id="numero" class="form-control">
            </div>
          </div>
        </div>
@@ -98,19 +88,19 @@ $fornecedor ='';
          <div class="col-md-4 col-sm-12">
            <div class="form-group">
              <label for="complemento">Complemento:</label>
-             <input type="text" name="complemento" id="complemento" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['complemento'] : ''); ?>">
+             <input type="text" name="complemento" id="complemento" class="form-control">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="bairro">Bairro:</label>
-             <input type="text" name="bairro" id="bairro" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['bairro'] : ''); ?>">
+             <input type="text" name="bairro" id="bairro" class="form-control">
            </div>
          </div>
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
              <label for="cidade">Cidade:</label>
-             <input type="text" name="cidade" id="cidade" class="form-control" value="<?php echo ($fornecedor != '' ? $fornecedor['cidade'] : ''); ?>">
+             <input type="text" name="cidade" id="cidade" class="form-control">
            </div>
          </div>
          <div class="col-md-2 col-sm-12">
@@ -118,16 +108,13 @@ $fornecedor ='';
              <label for="estado">Estado:</label>
              <select name="estado" class="form-control" id="estado">
                <option value=""></option>
-               <?php foreach ($estados as $estado) : ?>
-                 <option value="<?php echo $estado['sigla'] ?>" <?php echo ($fornecedor != '' && $fornecedor['estado'] == $estado['sigla'] ? 'selected' : '') ?>><?php echo $estado['sigla'] ?></option>
-               <?php endforeach; ?>
              </select>
            </div>
          </div>
        </div>
        <div class="row">
          <div class="col">
-           <button type="submit" class="btn btn-primary w-100"> <i class="fas fa-save"></i> Salvar</button>
+          <button class="btn btn-primary" onclick="salvarDados()"><i class="fas fa-save"></i> Salvar</button>
          </div>
        </div>
 
@@ -142,3 +129,77 @@ $fornecedor ='';
        include_once('layout/footer.php');
 
         ?>
+
+        <script>
+  $(document).ready(function() {
+    let procuraParametro = new URLSearchParams(window.location.search);
+    if(procuraParametro.has('id') && procuraParametro.get('id') != '') {
+      carregaDados(procuraParametro.get('id'));
+    }
+  })
+  function carregaDados(id) {
+    $.ajax({
+      url: 'api/fornecedores.php?acao=exibir&id=' + id,
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      $('#id').val(data.dados.id);
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+    })
+    .fail(function(data) {
+      $('#mensagem').html(retornaMensagemAlert(data.responseJSON.mensagem, data.responseJSON.alert));
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+  function salvarDados() {
+    var id = $('#id').val();
+    var cnpj = $('#cnpj').val();
+    var fantasia = $('#fantasia').val();
+    var razao_social = $('#razao_social').val();
+    var telefone = $('#telefone').val();
+    var email = $('#email').val();
+    var nome_contato = $('#nome_contato').val();
+    var cep = $('#cep').val();
+    var numero = $('#numero').val();
+    var complemento = $('#complemento').val();
+    var bairro = $('#bairro').val();
+    var cidade = $('#cidade').val();
+    var estado = $('#estado').val();
+
+    if(cnpj == '' || fantasia == '') {
+      alert('CNPJ e Nome Fantasia são obrigatórios!');
+      $('#cnpj').focus();
+      return false;
+    }
+
+    $.ajax({
+      url: 'api/fornecedores.php?acao=salvar',
+      type: 'POST',
+      dataType: 'json',
+      data: {cnpj: cnpj, fantasia: fantasia, id: id, razao_social: razao_social, telefone: telefone, email: email, nome_contato: nome_contato, cep: cep, numero: numero, complemento: complemento, bairro: bairro, cidade: cidade, estado: estado},
+      beforeSend: function(){
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      $('#id').val(data.dados.id);
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+      console.log(data);
+    })
+    .fail(function() {
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+    })
+    .always(function(data) {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+
+</script>

@@ -13,6 +13,7 @@ include_once('layout/sidebar.php');
 
   <div class="card">
     <div class="card-body">
+      <span id="mensagem"></span>
       <a href="form_categorias.php" class="btn btn-primary" style="float: right">
         <i class="fas fa-user"></i> Nova categoria
       </a>
@@ -53,6 +54,7 @@ include_once('layout/sidebar.php');
 include_once('layout/footer.php');
 ?>
 <script>
+  var algumacoisa
   $(document).ready(function() {
     carregaDados();
   });
@@ -85,6 +87,32 @@ include_once('layout/footer.php');
     
   }
 
+  function deletarDados(id) {
+    if(confirm('Deseja realmente excluir?')){
+      $.ajax({
+        url: 'api/categorias.php?acao=deletar&id=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        beforeSend: function() {
+          $('#carregando').fadeIn();
+        }
+      })
+      .done(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+          carregaDados();
+        /*setTimeout(function() {
+
+        }, 3000);*/
+      })
+      .fail(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+      })
+      .always(function() {
+        $('#carregando').fadeOut();
+      });
+    }
+      
+  }
   function carregaDados() {
     $.ajax({
       url: 'api/categorias.php?acao=listar',
@@ -109,10 +137,10 @@ include_once('layout/footer.php');
                     <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="form_categorias.php?id=" class="btn btn-warning">
+                    <a href="form_categorias.php?id=${value.id}" class="btn btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <a href="gerencia_categorias.php?id=${value.id}&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+                    <a href="#" class="btn btn-danger" onclick="deletarDados(${value.id})">
                       <i class="fas fa-trash"></i>
                     </a>
                   </td>

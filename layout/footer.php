@@ -57,6 +57,9 @@
         }, 5000);
      <?php endif; ?>
 
+    setTimeout(function(){
+      $('#mensagem').fadeOut();
+    }, 5000);
      
 
      $('.cep').on('change', function() {
@@ -160,6 +163,11 @@
     }
 
 
+    function retornaMensagemAlert(mensagem, alert) {
+      return `<div class="alert alert-${alert}" id="alert-mensagem">
+                ${mensagem}
+              </div>`;
+    }
 
     </script>
   </body>

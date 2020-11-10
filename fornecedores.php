@@ -5,7 +5,7 @@
 ?>
          <div class="col">
           <h2 class="titulo">Gestão de fornecedores</h2>
-          <span class="badge badge-info totais">Total:</span>
+          <span class="badge badge-info totais">Total: <span id="total"></span></span>
           <div class="clear"></div>
           <?php include_once('layout/mensagens.php'); ?>
 
@@ -104,32 +104,23 @@ include_once('layout/footer.php');
       var tbody = '';
       $.each(data.dados,function(index, value){
         tbody += `<tr>
-                  <td>${value.cnpj}</td>
                   <td>${value.fantasia}</td>
-                  <td>${value.razao_social}</td>
+                  <td>${value.cnpj}</td>
                   <td>${value.telefone}</td>
                   <td>${value.email}</td>
-                  <td>${value.nome_contato}</td>
-                  <td>${value.cep}</td>
-                  <td>${value.logradouro}</td>
-                  <td>${value.numero}</td>
-                  <td>${value.complemento}</td>
-                  <td>${value.bairro}</td>
-                  <td>${value.cidade}</td>
-                 
+                  <td>${value.cidade}/${value.estado}</td>               
                           
                   <td>
                     <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="form_fornecedores.php?id=" class="btn btn-warning">
+                    <a href="form_fornecedores.php?id=${value.id}" class="btn btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <a href="gerencia_fornecedores.php?id=${value.id}&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
+                    <a href="#" class="btn btn-danger" onclick="deletarDados(${value.id})">
                       <i class="fas fa-trash"></i>
                     </a>
                   </td>
-
                 </tr>`;
       });
 
@@ -142,6 +133,33 @@ include_once('layout/footer.php');
       $('#carregando').fadeOut();
     });
     
+  }
+
+   function deletarDados(id) {
+    if(confirm('Deseja realmente excluir?')){
+      $.ajax({
+        url: 'api/fornecedores.php?acao=deletar&id=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        beforeSend: function() {
+          $('#carregando').fadeIn();
+        }
+      })
+      .done(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+          carregaDados();
+        /*setTimeout(function() {
+
+        }, 3000);*/
+      })
+      .fail(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+      })
+      .always(function() {
+        $('#carregando').fadeOut();
+      });
+    }
+      
   }
 
 

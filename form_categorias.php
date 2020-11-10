@@ -1,16 +1,4 @@
 <?php 
-include_once('bd/conexao.php');
-
-if(isset($_GET['id']) && $_GET['id'] != '') {
-
-  $sql = "SELECT * FROM categoria WHERE id = " . $_GET['id'];
-  $qr = mysqli_query($conexao, $sql);
-  $categoria = mysqli_fetch_array($qr);
-
-} else {
-  $categoria = '';
-}
-
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
@@ -19,23 +7,23 @@ include_once('layout/sidebar.php');
   <h2>Nova categoria</h2>
   <div class="card">
     <div class="card-body">
-     <form method="post" action="gerencia_categorias.php?acao=salvar">
+      <span id="mensagem"></span>
+     <form method="post" onsubmit="return false;">
        <div class="row">
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
-             <label for="categoria">Categoria:</label>
-             <input type="text" name="categoria" id="categoria" class="form-control" value="<?php echo ( isset($categoria['categoria']) ? $categoria['categoria'] : ''); ?>">
-             <input type="hidden" name="id" value="<?php echo (isset($categoria['id']) ? $categoria['id'] : ''); ?>" placeholder="">
+             <label for="categoria">Categoria*:</label>
+             <input type="text" name="categoria" id="categoria" class="form-control" >
+             <input type="hidden" name="id" id="id" placeholder="">
            </div>
          </div>
          <div class="col-md-6 col-sm-12">
            <div class="form-group">
-             <label for="tipo">Tipo:</label>
-             <select name="tipo" class="form-control">
-               <option value="Equipamentos" <?php echo (isset($categoria['tipo']) && $categoria['tipo'] == 'Equipamentos' ? 'selected' : ''); ?>>Equipamentos</option>
-               <option value="Produtos" <?php echo (isset($categoria['tipo']) &&  $categoria['tipo'] == 'Produtos' ? 'selected' : ''); ?>>Produtos</option>
-               <option value="Serviços" <?php echo (isset($categoria['tipo']) &&  $categoria['tipo'] == 'Serviços' ? 'selected' : ''); ?>>Serviços</option>
-               option
+             <label for="tipo">Tipo*:</label>
+             <select name="tipo" id="tipo" class="form-control">
+               <option value="Equipamentos" >Equipamentos</option>
+               <option value="Produtos" >Produtos</option>
+               <option value="Serviços">Serviços</option>
              </select>
            </div>
          </div>
@@ -43,7 +31,7 @@ include_once('layout/sidebar.php');
        
        <div class="row">
          <div class="col">
-           <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+           <button class="btn btn-primary" onclick="salvarDados()"><i class="fas fa-save"></i> Salvar</button>
          </div>
        </div>
 
@@ -55,3 +43,69 @@ include_once('layout/sidebar.php');
 </div>
 <?php 
 include_once('layout/footer.php');
+?>
+<script>
+  $(document).ready(function() {
+    let procuraParametro = new URLSearchParams(window.location.search);
+    if(procuraParametro.has('id') && procuraParametro.get('id') != '') {
+      carregaDados(procuraParametro.get('id'));
+    }
+  })
+  function carregaDados(id) {
+    $.ajax({
+      url: 'api/categorias.php?acao=exibir&id=' + id,
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      $('#id').val(data.dados.id);
+      $('#categoria').val(data.dados.categoria);
+      $('#tipo').val(data.dados.tipo);
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+    })
+    .fail(function(data) {
+      $('#mensagem').html(retornaMensagemAlert(data.responseJSON.mensagem, data.responseJSON.alert));
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+  function salvarDados() {
+    var id = $('#id').val();
+    var categoria = $('#categoria').val();
+    var tipo = $('#tipo').val();
+
+    if(categoria == '' || tipo == '') {
+      alert('Categoria e tipo são obrigatórios!');
+      $('#categoria').focus();
+      return false;
+    }
+
+    $.ajax({
+      url: 'api/categorias.php?acao=salvar',
+      type: 'POST',
+      dataType: 'json',
+      data: {categoria: categoria, tipo: tipo, id: id },
+      beforeSend: function(){
+        $('#carregando').fadeIn();
+      }
+    })
+    .done(function(data) {
+      $('#id').val(data.dados.id);
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+      console.log(data);
+    })
+    .fail(function() {
+      $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+    })
+    .always(function(data) {
+      $('#carregando').fadeOut();
+    });
+    
+  }
+
+</script>

@@ -7,8 +7,8 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 
 if(isset($_GET['id']) && $acao == 'deletar' && $metodo == 'DELETE') {
 	$id = $_GET['id'];
-	if($id == '') {
-		$data['mensagem'] = 'ID é obrigatório';
+	if($id == '' || !is_numeric($id)) {
+		$data['mensagem'] = 'ID é obrigatório e deve ser numérico';
 	    $data['alert'] = 'danger';
 		http_response_code(400);
 		echo json_encode($data);
@@ -27,7 +27,7 @@ if(isset($_GET['id']) && $acao == 'deletar' && $metodo == 'DELETE') {
 	
 	$sql = "SELECT * FROM fornecedores";
 	$qr = mysqli_query($conexao, $sql);
-	$categorias = mysqli_fetch_all($qr, MYSQLI_ASSOC);
+	$fornecedores = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 
 	$data['mensagem'] = 'Dados carregados com sucesso!';
     $data['alert'] = 'success';
@@ -95,22 +95,27 @@ if(isset($_GET['id']) && $acao == 'deletar' && $metodo == 'DELETE') {
 	}
 
 	if(mysqli_query($conexao, $sql)) {
-		$mensagem = 'Salvo com sucesso!';
-		$alert = 'success';
+		$data['mensagem'] = 'Salvo com sucesso!';
+		$data['alert'] = 'success';
 
 		if($id == '') {
 			$id = mysqli_insert_id($conexao);
 		}
 
 	}else {
-		$mensagem = 'Erro ao salvar: ' . mysqli_error($conexao);
-		$alert = 'danger';
+		$data['mensagem'] = 'Erro ao salvar: ' . mysqli_error($conexao);
+		$data['alert'] = 'danger';
+		http_response_code(400);
+		echo json_encode($data);
+		exit;
 	}
 
-	$data['mensagem'] = $mensagem;
-    $data['alert'] = $alert;
-    $data['dados'] = $id;
-	http_response_code(200);
+	$sql_dados = "SELECT * FROM fornecedores WHERE id = " . $id;
+	$qr_dados = mysqli_query($conexao, $sql_dados);
+	$fornecedor = mysqli_fetch_assoc($qr_dados);
+
+    $data['dados'] = $fornecedor;
+	http_response_code(201);
 	echo json_encode($data);
 	exit;
 
