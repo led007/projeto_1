@@ -2,7 +2,6 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
-include_once('bd/estados.php');
 ?>
 
 <div class="col">
@@ -23,8 +22,8 @@ include_once('bd/estados.php');
        <div class="row">
          <div class="col-md-3 col-sm-12">
            <div class="form-group">
-             <label for="cpf">CNPJ:</label>
-             <input type="text" name="cpf" id="cnpj" class="form-control cnpj">
+             <label for="cnpj">CNPJ:</label>
+             <input type="text" name="cnpj" id="cnpj" class="form-control cnpj">
              <input type="hidden" name="id" id="id" placeholder="">
            </div>
          </div>
@@ -107,7 +106,7 @@ include_once('bd/estados.php');
            <div class="form-group">
              <label for="estado">Estado:</label>
              <select name="estado" class="form-control" id="estado">
-               <option value=""></option>
+               <option value="">Escolha</option>
              </select>
            </div>
          </div>
@@ -124,18 +123,23 @@ include_once('bd/estados.php');
     </div>
   </div>
 </div>
-       <?php 
-
-       include_once('layout/footer.php');
-
-        ?>
-
-        <script>
+<?php 
+include_once('layout/footer.php');
+?>
+<script src="js/estados.js" type="text/javascript"></script>
+<script>
   $(document).ready(function() {
     let procuraParametro = new URLSearchParams(window.location.search);
     if(procuraParametro.has('id') && procuraParametro.get('id') != '') {
       carregaDados(procuraParametro.get('id'));
     }
+
+    var laco_estados = '';
+    $.each(estados,function(index, el) {
+        laco_estados += `<option value="${el.sigla}">${el.sigla}</option>`; 
+    });
+    $('#estado').append(laco_estados);
+
   })
   function carregaDados(id) {
     $.ajax({
@@ -144,10 +148,24 @@ include_once('bd/estados.php');
       dataType: 'json',
       beforeSend: function() {
         $('#carregando').fadeIn();
+        $('#mensagem').fadeIn();
       }
     })
     .done(function(data) {
       $('#id').val(data.dados.id);
+      $('#cnpj').val(data.dados.cnpj);
+      $('#fantasia').val(data.dados.fantasia);
+      $('#razao_social').val(data.dados.razao_social);
+      $('#telefone').val(data.dados.telefone);
+      $('#email').val(data.dados.email);
+      $('#nome_contato').val(data.dados.nome_contato);
+      $('#cep').val(data.dados.cep);
+      $('#numero').val(data.dados.numero);
+      $('#complemento').val(data.dados.complemento);
+      $('#bairro').val(data.dados.bairro);
+      $('#cidade').val(data.dados.cidade);
+      $('#estado').val(data.dados.estado);
+      $('#logradouro').val(data.dados.logradouro);
       $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
     })
     .fail(function(data) {
@@ -172,6 +190,7 @@ include_once('bd/estados.php');
     var bairro = $('#bairro').val();
     var cidade = $('#cidade').val();
     var estado = $('#estado').val();
+    var logradouro = $('#logradouro').val();
 
     if(cnpj == '' || fantasia == '') {
       alert('CNPJ e Nome Fantasia são obrigatórios!');
@@ -183,7 +202,22 @@ include_once('bd/estados.php');
       url: 'api/fornecedores.php?acao=salvar',
       type: 'POST',
       dataType: 'json',
-      data: {cnpj: cnpj, fantasia: fantasia, id: id, razao_social: razao_social, telefone: telefone, email: email, nome_contato: nome_contato, cep: cep, numero: numero, complemento: complemento, bairro: bairro, cidade: cidade, estado: estado},
+      data: {
+              cnpj: cnpj, 
+              fantasia: fantasia, 
+              id: id, 
+              razao_social: razao_social, 
+              telefone: telefone, 
+              email: email, 
+              nome_contato: nome_contato, 
+              cep: cep, 
+              numero: numero, 
+              complemento: complemento, 
+              bairro: bairro, 
+              cidade: cidade, 
+              logradouro: logradouro, 
+              estado: estado
+            },
       beforeSend: function(){
         $('#carregando').fadeIn();
       }
@@ -191,7 +225,7 @@ include_once('bd/estados.php');
     .done(function(data) {
       $('#id').val(data.dados.id);
       $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
-      console.log(data);
+     
     })
     .fail(function() {
       $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
