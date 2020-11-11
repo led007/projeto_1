@@ -2,30 +2,9 @@
 include_once('layout/header.php');
 include_once('layout/menu.php');
 include_once('layout/sidebar.php');
-include_once('bd/conexao.php');
-
-
-if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
-  $pesquisa = $_GET['pesquisa'];
-
-  $sql = "SELECT p.*, c.categoria FROM produtos p 
-          LEFT JOIN categoria c ON p.categoria_id = c.id
-          WHERE c.tipo = 'Equipamentos' AND (nome LIKE '%{$pesquisa}%' OR codigo LIKE '%{$pesquisa}%')";
-}else {
-
-$sql = "SELECT p.*, c.categoria FROM produtos p 
-        LEFT JOIN categoria c ON p.categoria_id = c.id
-        WHERE c.tipo = 'Equipamentos'";
-
-}
-
-
-  $qr = mysqli_query($conexao, $sql);
-  $produtos = mysqli_fetch_all($qr, MYSQLI_ASSOC);
 ?>
 <div class="col">
   <h2 class="titulo">Equipamentos</h2>
-  <span class="badge badge-info totais">Total: <?php echo count($produtos); ?></span>
   <div class="clear"></div>
   <?php include_once('layout/mensagens.php'); ?>
 
@@ -40,6 +19,7 @@ $sql = "SELECT p.*, c.categoria FROM produtos p
       <br />
       <br />
       <table class="table table-striped table-hover">
+        <thead>
           <tr>
             <th>Código</th>
             <th>Nome</th>
@@ -47,32 +27,11 @@ $sql = "SELECT p.*, c.categoria FROM produtos p
             <th>Data de Compra</th>
             <th class="acao">Ação</th>
           </tr>
-          <?php foreach ($produtos as $key => $produto): ?>
-          <tr>
-            <td><?= $produto['codigo'] ?></td>
-            <td><?= $produto['nome'] ?></td>
-            <td><?= (isset($produto['categoria']) ? $produto['categoria'] : 'Não definida') ?></td>
-            <td><?= $produto['data_compra'] ?? 'Não informada' ?></td>
-            <td>
-              <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(
-                <?php echo $produto['id']; ?>
-              )">
-                <i class="fas fa-eye"></i>
-              </a>
-              <a href="form_equipamentos.php?id=<?= $produto['id'] ?>" class="btn btn-warning">
-                <i class="fas fa-edit"></i>
-              </a>
-              <a href="gerencia_equipamentos.php?id=<?= $produto['id']; ?>&acao=deletar" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?')">
-                <i class="fas fa-trash"></i>
-              </a>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-
+        </thead>
+        <tbody>
+        </tbody>  
       </table>
-      <?php if(empty($produtos)): ?>
-            <div class="alert alert-info">Nenhuma informação encontrada.</div>
-          <?php endif; ?>
+      <div class="alert alert-info" id="mensagem-vazio" style="display: none;">Nenhuma informação encontrada.</div>
        <nav aria-label="Navegação de página exemplo" class="pagination">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
@@ -90,39 +49,110 @@ $sql = "SELECT p.*, c.categoria FROM produtos p
   include_once('layout/footer.php');
 ?>
 <script>
+  var algumacoisa
+  $(document).ready(function() {
+    carregaDados();
+  });
   function verDados(id) {
     $.ajax({
-      url: 'gerencia_equipamentos.php?acao=get&id=' + id,
+      url: `api/equipamentos.php?id=${id}&acao=exibir`,
       type: 'GET',
+      dataType: 'json',
       beforeSend: function() {
         $('#carregando').fadeIn();
       }
     })
-    .done(function(dados) {
-      var dados_json = JSON.parse(dados);
+    .done(function(data) {
       var texto = '';
-      Object.keys(dados_json).forEach(function(k)
-      {
-        var th = k.replace('_', ' ');
-        texto += `<p><strong
-                  style = "text-transform:
-                  capitalize">
-                  ${th}</strong>: ${dados_json[k]
-                   ?? ''}</p>`;
-    });
+      Object.keys(data.dados).forEach(function(index){
+        var th = index.replace('_', ' ');
+        texto += `<p><strong style="text-transform: capitalize">${th}: </strong> ${data.dados[index] ?? ''}</p>`;
+      })
 
-      $('#titulo-modal').html('Produto: ' +
-        dados_json.nome);
+      $('#titulo-modal').html(`Equipamento: ${data.dados.equipamento}` );
       $('#corpo-modal').html(texto);
 
-
-  })
+    })
     .fail(function() {
-      alert('Dados não encontrados.')
+      alert('Erro ao buscar os dados.')
     })
     .always(function() {
       $('#carregando').fadeOut();
     });
+    
+  }
 
+  function deletarDados(id) {
+    if(confirm('Deseja realmente excluir?')){
+      $.ajax({
+        url: 'api/equipamentos.php?acao=deletar&id=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        beforeSend: function() {
+          $('#carregando').fadeIn();
+        }
+      })
+      .done(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+          carregaDados();
+        /*setTimeout(function() {
+
+        }, 3000);*/
+      })
+      .fail(function(data) {
+        $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
+      })
+      .always(function() {
+        $('#carregando').fadeOut();
+      });
+    }
+      
+  }
+  function carregaDados() {
+    $.ajax({
+      url: 'api/equipamentos.php?acao=listar',
+      type: 'GET',
+      dataType: 'json',
+     beforeSend: function() {
+       $('#carregando').fadeIn();
+     }
+    })
+    .done(function(data) {
+      if(data.dados.length < 1) {
+        $('#mensagem-vazio').fadeIn();
+      }
+      $('#total').html(data.dados.length);
+      var tbody = '';
+      $.each(data.dados,function(index, value){
+        tbody += `<tr>
+                  <td>${value.codigo}</td>
+                  <td>${value.nome}</td>
+                  <td>${value.categoria}</td>
+                  <td>${value.data_compra}</td>
+                
+                  <td>
+                    <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#modalVerDados" onclick="verDados(${value.id})">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="form_equipamentos.php?id=${value.id}" class="btn btn-warning">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="#" class="btn btn-danger" onclick="deletarDados(${value.id})">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+
+                </tr>`;
+      });
+
+      $('tbody').html(tbody);
+    })
+    .fail(function(data) {
+      console.log(data);
+    })
+    .always(function() {
+      $('#carregando').fadeOut();
+    });
+    
   }
 </script>
