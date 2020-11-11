@@ -56,7 +56,7 @@ if(isset($_GET['id']) && $acao == 'deletar' && $metodo == 'DELETE') {
 	exit;
 }else if($acao == 'salvar' && $metodo == 'POST') {
 
-	$cnpj = $_POST['cpf'];
+	$cnpj = $_POST['cnpj'];
 	$fantasia = $_POST['fantasia'];
 	$razao_social = $_POST['razao_social'];
 	$telefone = $_POST['telefone'];
@@ -72,26 +72,27 @@ if(isset($_GET['id']) && $acao == 'deletar' && $metodo == 'DELETE') {
 	$id = $_POST['id'];
 
 	if($id == '') {
-		"INSERT INTO fornecedores 
+		$sql = "INSERT INTO fornecedores 
 			(razao_social, fantasia, cnpj, email, telefone, nome_contato, cep ,logradouro, numero, complemento, bairro, cidade, estado,usuario_id) 
 			VALUES
 			('$razao_social', '$fantasia','$cnpj', '$email', '$telefone', '$nome_contato', '$cep','$logradouro','$numero', '$complemento', '$bairro', '$cidade', '$estado','1');";
 
-	} else {"UPDATE fornecedores SET 
-		razao_social = '{$razao_social}',
-		fantasia = '{$fantasia}',
-		cnpj = '{$cnpj}',
-		email = '{$email}',
-		telefone = '{$telefone}',
-		nome_contato = '{$nome_contato}',
-		cep = '{$cep}',
-		logradouro = '{$logradouro}',
-		numero = '{$numero}' ,
-		complemento = '{$complemento}' ,
-		bairro = '{$bairro}' ,
-		cidade = '{$cidade}',
-		estado = '{$estado}'
-		WHERE id = {$id};";
+	} else {
+		$sql = "UPDATE fornecedores SET 
+					razao_social = '{$razao_social}',
+					fantasia = '{$fantasia}',
+					cnpj = '{$cnpj}',
+					email = '{$email}',
+					telefone = '{$telefone}',
+					nome_contato = '{$nome_contato}',
+					cep = '{$cep}',
+					logradouro = '{$logradouro}',
+					numero = '{$numero}' ,
+					complemento = '{$complemento}' ,
+					bairro = '{$bairro}' ,
+					cidade = '{$cidade}',
+					estado = '{$estado}'
+				WHERE id = {$id};";
 	}
 
 	if(mysqli_query($conexao, $sql)) {

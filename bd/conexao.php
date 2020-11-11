@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $user = 'root';
-$pass = 'Invokermid2k';
+$pass = 'Invokermdi2k';
 $bd = 'laborus';
 
 //Iniciando a conexão com o banco de dados MySQL/MariaDB

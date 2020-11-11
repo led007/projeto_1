@@ -1,5 +1,5 @@
 <?php 
-$lang = 'eng';
+$lang = 'pt-BR';
 
 //Português
 $msg['pt-BR']['titulo_sistema'] = 'Sistema de Gestão de Labotórios';

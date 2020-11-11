@@ -149,7 +149,6 @@ include_once('layout/footer.php');
         $('#mensagem').html(retornaMensagemAlert(data.mensagem, data.alert));
           carregaDados();
         /*setTimeout(function() {
-
         }, 3000);*/
       })
       .fail(function(data) {

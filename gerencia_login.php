@@ -23,7 +23,6 @@ $sql = "SELECT id, nome, email, senha, cpf, tentativas
 $qr = mysqli_query($conexao, $sql);
 $usuario = mysqli_fetch_assoc($qr);
 
-
 if($usuario == null) {
 	$data['mensagem'] = $msg[$lang]['login_nao_encontrado'];//exemplo de multi linguagem
     $data['alert'] = 'danger';
